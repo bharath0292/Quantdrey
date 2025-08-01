@@ -1,0 +1,128 @@
+enum ValueType {
+    price_field
+    indicator
+    constant
+}
+
+enum PriceField {
+    close
+    open
+    high
+    low
+    volume
+}
+
+############### Query #####################
+type IndicatorField {
+    name: Indicator!
+    params: IndicatorParams!
+}
+
+type Operand {
+    type: ValueType!
+    indicatorField: IndicatorField
+    priceField: PriceField
+    constantField: Float
+    offset: Int
+}
+
+type Condition {
+    left: Operand!
+    operator: ComparisonOperator!
+    right: Operand!
+}
+
+type LogicalGroup {
+    operator: LogicalOperator!
+    expressions: [Expression!]!
+}
+
+type Expression {
+    condition: Condition
+    logical: LogicalGroup
+}
+
+type SymbolRule {
+    lookUpSymbol: String!
+    instrument: Instrument!
+    orderSymbol: String!
+    expiry: String
+    lotSize: Int!
+}
+
+type StrategyRule {
+    symbol: SymbolRule!
+    transaction: Transaction!
+    profit: Float
+    loss: Float
+    entryLogic: Expression
+    exitLogic: Expression
+}
+
+############### Mutation #####################
+
+input IndicatorFieldInput {
+    name: Indicator!
+    params: IndicatorParamsInput!
+}
+
+input OperandInput {
+    type: ValueType!
+    indicatorField: IndicatorFieldInput
+    priceField: PriceField
+    constantField: Float
+    offset: Int
+}
+
+input ConditionInput {
+    left: OperandInput!
+    operator: ComparisonOperator!
+    right: OperandInput!
+}
+
+input LogicalGroupInput {
+    operator: LogicalOperator!
+    expressions: [ExpressionInput!]!
+}
+
+input ExpressionInput {
+    condition: ConditionInput
+    logical: LogicalGroupInput
+}
+
+input SymbolRuleInput {
+    lookUpSymbol: String!
+    instrument: Instrument!
+    orderSymbol: String!
+    expiry: String
+    lotSize: Int!
+}
+
+input StrategyRuleInput {
+    symbol: SymbolRuleInput!
+    transaction: Transaction!
+    profit: Float
+    loss: Float
+    entryLogic: ExpressionInput
+    exitLogic: ExpressionInput
+}
+
+type Strategy {
+    id: ID!
+    name: String!
+    userId: ID!
+    startTime: Time!
+    endTime: Time!
+    createdAt: Time
+    maxTransactionPerDay: Int
+    maxProfit: Float
+    maxLoss: Float
+}
+
+type Query {
+    listAllStrategy(userId: ID!): Strategy!
+}
+
+type Mutation {
+    createStrategy(input: NewStrategy!): Strategy!
+}

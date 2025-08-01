@@ -1,0 +1,5 @@
+./vs*
+./zed
+./logs
+./tmp
+.env
