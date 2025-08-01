@@ -1,5 +1,3 @@
-include .env
-
 DOMAIN=orchestrator.local
 CERT_DIR=certs
 CERT_FILE=$(CERT_DIR)/$(DOMAIN).pem
@@ -29,7 +27,7 @@ clean-certs:
 	@echo "Certificates removed."
 
 watch:
-	air
+	@export GIN_MODE=debug; air
 
 gql-init:
 	go run github.com/99designs/gqlgen init

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"os"
+	"path/filepath"
 	"time"
 
 	// Factories
@@ -27,29 +28,45 @@ import (
 )
 
 func init() {
-	// To set global timezone
-	os.Setenv("TZ", "UTC")
+	devMode := os.Getenv("GIN_MODE") == "debug"
+	logLevel := zerolog.InfoLevel
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Info().Msgf("Error loading .env file: %v", err)
+	if devMode {
+		// To set log level
+		logLevel = zerolog.DebugLevel
+
+		// To set global timezone early
+		os.Setenv("TZ", "UTC")
+
+		// Read env files from current and parent directories
+		cwd, err := os.Getwd()
+		if err != nil {
+			log.Fatal().Msgf("Could not get working directory: %v", err)
+		}
+
+		filesToTry := []string{
+			filepath.Join(cwd, ".env"),
+			filepath.Join(filepath.Dir(cwd), ".env"),
+		}
+
+		if err := godotenv.Load(filesToTry...); err != nil {
+			log.Fatal().Err(err).Msg("Error loading .env files")
+		}
 	}
+
+	util.InitLogger(logLevel)
+
 	requiredEnvVars := []string{
-		"GIN_MODE", "API_AUTH_KEY",
+		"API_AUTH_KEY",
 		"MONGO_URI", "MONGO_USERNAME", "MONGO_PASSWORD",
 		"REDIS_URI", "REDIS_USERNAME", "REDIS_PASSWORD",
 		"NATS_URI", "NATS_USERNAME", "NATS_PASSWORD",
 	}
+
 	if err := util.ValidateEnvVars(requiredEnvVars); err != nil {
-		log.Logger.Fatal().Msg(err.Error())
+		log.Fatal().Msg(err.Error())
 		os.Exit(1)
 	}
-
-	logLevel := zerolog.InfoLevel
-	if os.Getenv("GIN_MODE") == "debug" {
-		logLevel = zerolog.DebugLevel
-	}
-	util.InitLogger(logLevel)
 }
 
 func main() {
