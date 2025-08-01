@@ -1,0 +1,9 @@
+type IndicatorParams {
+    rsi: RsiParams
+    bb: BbParams
+}
+
+input IndicatorParamsInput {
+    rsi: RsiParamsInput
+    bb: BbParamsInput
+}

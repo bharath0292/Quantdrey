@@ -1,0 +1,7 @@
+enum Instrument {
+    equity
+    futstk
+    optstk
+    futidx
+    optidx
+}

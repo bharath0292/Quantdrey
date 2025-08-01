@@ -1,0 +1,80 @@
+networks:
+  quantdrey-network:
+    name: quantdrey-network
+    driver: bridge
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: quantdrey-mongo
+    networks:
+      - quantdrey-network
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - quantdrey-mongo:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis/redis-stack:latest
+    container_name: quantdrey-redis
+    networks:
+      - quantdrey-network
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+    environment:
+      REDIS_ARGS: "--appendonly yes --dir /data --user ${REDIS_USERNAME} on >${REDIS_PASSWORD} ~* +@all --user default off"
+    volumes:
+      - quantdrey-redis:/data
+    restart: unless-stopped
+
+  nats:
+    image: nats:latest
+    container_name: quantdrey-nats
+    networks:
+      - quantdrey-network
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command:
+      - "-user"
+      - "${NATS_USERNAME}"
+      - "-pass"
+      - "${NATS_PASSWORD}"
+      - "-js"
+      - "-sd"
+      - "/data"
+      - "-m"
+      - "8222"
+    volumes:
+      - quantdrey-nats:/data
+    restart: unless-stopped
+
+volumes:
+  quantdrey-mongo:
+    name: quantdrey-mongo
+    driver: local
+    driver_opts:
+      type: none
+      device: ./volumes/quantdrey-mongo
+      o: bind
+
+  quantdrey-redis:
+    name: quantdrey-redis
+    driver: local
+    driver_opts:
+      type: none
+      device: ./volumes/quantdrey-redis
+      o: bind
+
+  quantdrey-nats:
+    name: quantdrey-nats
+    driver: local
+    driver_opts:
+      type: none
+      device: ./volumes/quantdrey-nats
+      o: bind

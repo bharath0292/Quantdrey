@@ -1,0 +1,21 @@
+[build]
+    cmd = "go build -o ./tmp/main.exe main.go"
+    bin = "tmp/main.exe"
+    include_ext = ["go"]
+    exclude_dir = ["cert", "logs", "tmp"]
+    delay = 1000
+    stop_on_error = true
+
+[log]
+    level = "debug"
+    time = true
+
+[watch]
+    exclude = ["cert", "logs", "tmp"]
+
+[color]
+    app = "white"
+    build = "yellow"
+    main = "magenta"
+    runner = "green"
+    watcher = "cyan"

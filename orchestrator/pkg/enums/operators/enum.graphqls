@@ -1,0 +1,13 @@
+enum ComparisonOperator {
+    eq
+	neq
+	gt
+	gteq
+	lt
+	lteq
+}
+
+enum LogicalOperator {
+    and
+    or
+}

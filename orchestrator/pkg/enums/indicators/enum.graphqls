@@ -1,0 +1,8 @@
+enum Indicator {
+    rsi
+    cci
+    sma
+    bb
+    supertrend
+    pp
+}
