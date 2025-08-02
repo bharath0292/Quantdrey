@@ -4,6 +4,20 @@ networks:
     driver: bridge
 
 services:
+  postgres:
+    image: postgres:latest
+    container_name: quantdrey-postgres
+    networks:
+      - quantdrey-network
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - quantdrey-postgres:/var/lib/postgresql/data
+
   mongo:
     image: mongo:latest
     container_name: quantdrey-mongo
@@ -77,4 +91,12 @@ volumes:
     driver_opts:
       type: none
       device: ./volumes/quantdrey-nats
+      o: bind
+
+  quantdrey-postgres:
+    name: quantdrey-postgres
+    driver: local
+    driver_opts:
+      type: none
+      device: ./volumes/quantdrey-postgres
       o: bind
