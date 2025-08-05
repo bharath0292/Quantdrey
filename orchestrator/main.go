@@ -61,7 +61,7 @@ func init() {
 		"MONGO_URI", "MONGO_USERNAME", "MONGO_PASSWORD",
 		"REDIS_URI", "REDIS_USERNAME", "REDIS_PASSWORD",
 		"NATS_URI", "NATS_USERNAME", "NATS_PASSWORD",
-		"POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD",
+		"POSTGRES_SERVER", "POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD",
 	}
 
 	if err := util.ValidateEnvVars(requiredEnvVars); err != nil {
@@ -109,12 +109,13 @@ func main() {
 	mongoUri := os.Getenv("MONGO_URI")
 	mongoUsername := os.Getenv("MONGO_USERNAME")
 	mongoPassword := os.Getenv("MONGO_PASSWORD")
-	postgresConfig := postgresFactory.PostgresConfig{}
 	mongoConfig := mongoFactory.MongoConfig{
 		Uri:      mongoUri,
 		Username: &mongoUsername,
 		Password: &mongoPassword,
 	}
+
+	postgresConfig := postgresFactory.PostgresConfig{}
 
 	ctx := context.Background()
 	factories, err := factory.NewFactory(ctx, factory.FactoryConfig{
