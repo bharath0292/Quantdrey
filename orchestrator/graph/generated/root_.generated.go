@@ -768,8 +768,8 @@ type StrategyRule {
     transaction: Transaction!
     profit: Float
     loss: Float
-    entryLogic: Expression
-    exitLogic: Expression
+    entryLogic: Expression!
+    exitLogic: Expression!
 }
 
 ############### Mutation #####################

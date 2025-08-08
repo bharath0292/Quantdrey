@@ -13,6 +13,7 @@ import (
 	postgresFactory "github.com/bharath0292/quantdrey/infrastructure/postgres"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 
+	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
 	strategyservice "github.com/bharath0292/quantdrey/internal/domains/strategy/service"
 	tickhub "github.com/bharath0292/quantdrey/internal/domains/tick/hub"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
@@ -132,9 +133,12 @@ func main() {
 	tickHub := tickhub.NewTickHub(factories.RedisClient, factories.NatsClient)
 	tickHub.SubscribeTicks()
 
+	/* ######### REPOSITORIES ######### */
+	strategyRepository := strategyrepository.NewStrategyService(factories.MongoClient)
+
 	/* ######### SERVICES ######### */
 	tickService := tickservice.NewTickService(factories.NatsClient, tickHub)
-	strategyService := strategyservice.NewStrategyService(tickService)
+	strategyService := strategyservice.NewStrategyService(tickService, strategyRepository)
 
 	/* ######### HANDLERS ######### */
 

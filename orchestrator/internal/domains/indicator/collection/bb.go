@@ -15,15 +15,15 @@ const (
 )
 
 type BbParams struct {
-	Period int
-	StdDev int
-	Output BbOutput
+	Period int      `bson:"period"`
+	StdDev int      `bson:"stddev"`
+	Output BbOutput `bson:"output"`
 }
 
 type Bb struct {
-	Upper  float64 `json:"upper"`
-	Middle float64 `json:"middle"`
-	Lower  float64 `json:"lower"`
+	Upper  float64
+	Middle float64
+	Lower  float64
 }
 
 func GetBb(bar *tickentity.Bar, period, stddev int) (*Bb, bool) {

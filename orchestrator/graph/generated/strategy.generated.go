@@ -1555,9 +1555,9 @@ func (ec *executionContext) _StrategyRule_profit(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(float64)
+	res := resTmp.(*float64)
 	fc.Result = res
-	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_StrategyRule_profit(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1596,9 +1596,9 @@ func (ec *executionContext) _StrategyRule_loss(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(float64)
+	res := resTmp.(*float64)
 	fc.Result = res
-	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_StrategyRule_loss(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1635,11 +1635,14 @@ func (ec *executionContext) _StrategyRule_entryLogic(ctx context.Context, field 
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*strategyentity.Expression)
+	res := resTmp.(strategyentity.Expression)
 	fc.Result = res
-	return ec.marshalOExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, field.Selections, res)
+	return ec.marshalNExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_StrategyRule_entryLogic(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1682,11 +1685,14 @@ func (ec *executionContext) _StrategyRule_exitLogic(ctx context.Context, field g
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*strategyentity.Expression)
+	res := resTmp.(strategyentity.Expression)
 	fc.Result = res
-	return ec.marshalOExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, field.Selections, res)
+	return ec.marshalNExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_StrategyRule_exitLogic(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2120,7 +2126,7 @@ func (ec *executionContext) unmarshalInputOperandInput(ctx context.Context, obj 
 			if err != nil {
 				return it, err
 			}
-			it.Offset = data
+			it.Offset = &data
 		}
 	}
 
@@ -2157,28 +2163,28 @@ func (ec *executionContext) unmarshalInputStrategyRuleInput(ctx context.Context,
 			it.Transaction = data
 		case "profit":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("profit"))
-			data, err := ec.unmarshalOFloat2float64(ctx, v)
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Profit = data
 		case "loss":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("loss"))
-			data, err := ec.unmarshalOFloat2float64(ctx, v)
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Loss = data
 		case "entryLogic":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entryLogic"))
-			data, err := ec.unmarshalOExpressionInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
+			data, err := ec.unmarshalOExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.EntryLogic = data
 		case "exitLogic":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("exitLogic"))
-			data, err := ec.unmarshalOExpressionInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
+			data, err := ec.unmarshalOExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2689,8 +2695,14 @@ func (ec *executionContext) _StrategyRule(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._StrategyRule_loss(ctx, field, obj)
 		case "entryLogic":
 			out.Values[i] = ec._StrategyRule_entryLogic(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "exitLogic":
 			out.Values[i] = ec._StrategyRule_exitLogic(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2906,19 +2918,9 @@ func (ec *executionContext) unmarshalOConditionInput2ᚖgithubᚗcomᚋbharath02
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, sel ast.SelectionSet, v *strategyentity.Expression) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._Expression(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOExpressionInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, v any) (*strategyentity.Expression, error) {
-	if v == nil {
-		return nil, nil
-	}
+func (ec *executionContext) unmarshalOExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, v any) (strategyentity.Expression, error) {
 	res, err := ec.unmarshalInputExpressionInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOIndicatorField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐIndicatorField(ctx context.Context, sel ast.SelectionSet, v *strategyentity.IndicatorField) graphql.Marshaler {

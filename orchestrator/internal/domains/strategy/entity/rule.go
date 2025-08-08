@@ -6,18 +6,18 @@ import (
 )
 
 type SymbolRule struct {
-	LookUpSymbol string                    `bson:"lookup_symbol"`
-	Instrument   instrumenttype.Instrument `bson:"instrument_type"`
-	OrderSymbol  string                    `bson:"order_symbol"`
+	LookUpSymbol string                    `bson:"lookupSymbol"`
+	Instrument   instrumenttype.Instrument `bson:"instrumentType"`
+	OrderSymbol  string                    `bson:"orderSymbol"`
 	Expiry       string                    `bson:"expiry,omitempty"`
-	LotSize      int                       `bson:"lot_size"`
+	LotSize      int                       `bson:"lotSize"`
 }
 
 type StrategyRule struct {
 	Symbol      SymbolRule                  `bson:"symbol"`
-	Transaction transactiontype.Transaction `bson:"transaction_type"`
-	Profit      float64                     `bson:"max_profit"`
-	Loss        float64                     `bson:"max_loss"`
-	EntryLogic  *Expression                 `bson:"entry_logic,omitempty"`
-	ExitLogic   *Expression                 `bson:"exit_logic,omitempty"`
+	Transaction transactiontype.Transaction `bson:"transactionType"`
+	Profit      *float64                    `bson:"profit,omitempty"`
+	Loss        *float64                    `bson:"loss,omitempty"`
+	EntryLogic  Expression                  `bson:"entryLogic"`
+	ExitLogic   Expression                  `bson:"exitLogic"`
 }

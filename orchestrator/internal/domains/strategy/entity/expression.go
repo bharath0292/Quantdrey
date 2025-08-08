@@ -7,7 +7,6 @@ import (
 )
 
 type Expression struct {
-	// Only one of these should be set
 	Condition *Condition    `bson:"condition,omitempty" json:"condition,omitempty"`
 	Logical   *LogicalGroup `bson:"logical,omitempty" json:"logical,omitempty"`
 }

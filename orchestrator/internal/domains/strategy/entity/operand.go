@@ -23,15 +23,15 @@ type IndicatorField struct {
 type ValueType string
 
 const (
-	ValueTypePriceField ValueType = "price_field" // "close", "open", etc.
-	ValueTypeIndicator  ValueType = "indicator"   // "rsi", "macd", etc.
-	ValueTypeConstant   ValueType = "constant"    // numeric values
+	ValueTypePriceField ValueType = "priceField" // "close", "open", etc.
+	ValueTypeIndicator  ValueType = "indicator"  // "rsi", "macd", etc.
+	ValueTypeConstant   ValueType = "constant"   // numeric values
 )
 
 type Operand struct {
 	Type           ValueType       `bson:"type"`
-	IndicatorField *IndicatorField `bson:"indicator,omitempty"`   // if Type is indicator
-	PriceField     *PriceField     `bson:"price_field,omitempty"` // if Type is price
-	ConstantField  *float64        `bson:"constant,omitempty"`    // if Type is constant
-	Offset         int             `bson:"offset,omitempty"`      // e.g., -1 means previous candle
+	IndicatorField *IndicatorField `bson:"indicator,omitempty"`  // if Type is indicator
+	PriceField     *PriceField     `bson:"priceField,omitempty"` // if Type is price
+	ConstantField  *float64        `bson:"constant,omitempty"`   // if Type is constant
+	Offset         *int            `bson:"offset,omitempty"`     // e.g., -1 means previous candle
 }

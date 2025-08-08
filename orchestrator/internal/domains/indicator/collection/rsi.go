@@ -13,8 +13,8 @@ const (
 )
 
 type RsiParams struct {
-	Period int
-	Output Output
+	Period int    `bson:"period"`
+	Output Output `bson:"output"`
 }
 
 type Rsi struct {

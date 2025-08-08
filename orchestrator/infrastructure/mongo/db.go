@@ -51,3 +51,11 @@ func NewMongoClient(ctx context.Context, config MongoConfig) (*MongoClient, erro
 	}
 	return &MongoClient{client}, nil
 }
+
+func (c *MongoClient) CreateDocument() error {
+	return nil
+}
+
+func (c *MongoClient) UpdateDocument() error {
+	return nil
+}
