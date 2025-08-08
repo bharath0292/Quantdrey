@@ -12,6 +12,9 @@ KEY_FILE=$(CERT_DIR)/$(DOMAIN)-key.pem
 POSTGRES_MIGRATION_DIR=infrastructure/postgres/migrations
 POSTGRESQL_URL=postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_SERVER):5432/$(POSTGRES_DB)?sslmode=disable
 
+MONGO_MIGRATION_DIR=infrastructure/mongo/migrations
+MONGO_URL=mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@$(MONGO_URI)/quantdrey?authSource=admin
+
 .PHONY: create-certs clean-certs
 
 # Create certificates
@@ -44,11 +47,20 @@ gql-init:
 gql-generate:
 	go run github.com/99designs/gqlgen generate
 
-migrate-create:
+migrate-create-sql:
 	migrate create -ext sql -dir $(POSTGRES_MIGRATION_DIR) -seq $(TAG)
+
+migrate-create-no-sql:
+	migrate create -ext json -dir $(MONGO_MIGRATION_DIR) -seq $(TAG)
 
 migrate-up:
 	migrate -database $(POSTGRESQL_URL) -path $(POSTGRES_MIGRATION_DIR) up
 
 migrate-down:
 	migrate -database $(POSTGRESQL_URL) -path $(POSTGRES_MIGRATION_DIR) down
+
+migrate-up-no-sql:
+	migrate -database $(MONGO_URL) -path $(MONGO_MIGRATION_DIR) up
+
+migrate-down-no-sql:
+	migrate -database $(MONGO_URL) -path $(MONGO_MIGRATION_DIR) down

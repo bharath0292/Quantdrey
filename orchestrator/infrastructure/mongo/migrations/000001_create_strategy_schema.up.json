@@ -1,0 +1,205 @@
+[
+  {
+    "create": "strategies",
+    "validator": {
+      "$jsonSchema": {
+        "bsonType": "object",
+        "required": [
+          "name",
+          "userId",
+          "startTime",
+          "endTime",
+          "rule"
+        ],
+        "properties": {
+          "name": {
+            "bsonType": "string",
+            "description": "Name of strategy"
+          },
+          "userId": {
+            "bsonType": "int",
+            "description": "User ID"
+          },
+          "startTime": {
+            "bsonType": "string",
+            "description": "Start time as a string"
+          },
+          "endTime": {
+            "bsonType": "string",
+            "description": "End time as a string"
+          },
+          "rule": {
+            "bsonType": "object",
+            "description": "Rules of the strategy",
+            "required": [
+              "symbol",
+              "transactionType",
+              "entryLogic",
+              "exitLogic"
+            ],
+            "properties": {
+              "symbol": {
+                "bsonType": "object",
+                "description": "Lookup and order symbol details",
+                "required": [
+                  "lookupSymbol",
+                  "instrumentType",
+                  "orderSymbol",
+                  "lotSize"
+                ],
+                "properties": {
+                  "lookupSymbol": {
+                    "bsonType": "string",
+                    "description": "Symbol to lookup for condition"
+                  },
+                  "instrumentType": {
+                    "bsonType": "string",
+                    "enum": [
+                      "equity",
+                      "futstk",
+                      "optstk",
+                      "futidx",
+                      "optidx"
+                    ],
+                    "description": "Must be one of the predefined instrument types"
+                  },
+                  "orderSymbol": {
+                    "bsonType": "string",
+                    "description": "Symbol to order if condition is met"
+                  },
+                  "expiry": {
+                    "bsonType": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Expiry details if futures or options"
+                  },
+                  "lotSize": {
+                    "bsonType": "int",
+                    "description": "Quantity to place"
+                  }
+                }
+              },
+              "transactionType": {
+                "bsonType": "string",
+                "enum": [
+                  "buy",
+                  "sell"
+                ],
+                "description": "Must be one of the predefined transaction types"
+              },
+              "profit": {
+                "bsonType": [
+                  "double",
+                  "null"
+                ],
+                "description": "Profit amount"
+              },
+              "loss": {
+                "bsonType": [
+                  "double",
+                  "null"
+                ],
+                "description": "Loss amount"
+              },
+              "entryLogic": {
+                "bsonType": "object",
+                "description": "Entry logic details",
+                "properties": {
+                  "condition": {
+                    "bsonType": "object",
+                    "description": "Comparison condition",
+                    "required": [
+                      "left",
+                      "operator",
+                      "right"
+                    ]
+                  },
+                  "logical": {
+                    "bsonType": "object",
+                    "description": "Group of Comparison condition",
+                    "required": [
+                      "operator",
+                      "expressions"
+                    ]
+                  }
+                }
+              },
+              "exitLogic": {
+                "bsonType": "object",
+                "description": "Exit logic details",
+                "properties": {
+                  "condition": {
+                    "bsonType": "object",
+                    "description": "Comparison condition",
+                    "required": [
+                      "left",
+                      "operator",
+                      "right"
+                    ]
+                  },
+                  "logical": {
+                    "bsonType": "object",
+                    "description": "Group of Comparison condition",
+                    "required": [
+                      "operator",
+                      "expressions"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "bsonType": [
+              "date",
+              "null"
+            ],
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "bsonType": [
+              "date",
+              "null"
+            ],
+            "description": "Update timestamp"
+          },
+          "maxTransactionPerDay": {
+            "bsonType": [
+              "int",
+              "null"
+            ],
+            "description": "Optional max transactions per day"
+          },
+          "maxProfit": {
+            "bsonType": [
+              "double",
+              "null"
+            ],
+            "description": "Optional max profit"
+          },
+          "maxLoss": {
+            "bsonType": [
+              "double",
+              "null"
+            ],
+            "description": "Optional max loss"
+          }
+        }
+      }
+    },
+    "validationLevel": "strict",
+    "validationAction": "error"
+  },
+  {
+    "createIndexes": "strategies",
+    "indexes": [
+      {
+        "key": {
+          "userId": 1
+        },
+        "name": "userId_idx"
+      }
+    ]
+  }
+]
