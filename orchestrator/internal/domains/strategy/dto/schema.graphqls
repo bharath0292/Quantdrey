@@ -1,10 +1,7 @@
-scalar Time
-
 input NewStrategy {
     name: String!
-    userId: ID!
-    startTime: Time!
-    endTime: Time!
+    startTime: String!
+    endTime: String!
     rule: StrategyRuleInput
     maxTransactionPerDay: Int
     maxProfit: Float

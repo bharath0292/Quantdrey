@@ -38,9 +38,6 @@ clean-certs:
 	@rmdir --ignore-fail-on-non-empty $(CERT_DIR) 2>/dev/null || true
 	@echo "Certificates removed."
 
-watch:
-	@export GIN_MODE=debug; air
-
 gql-init:
 	go run github.com/99designs/gqlgen init
 

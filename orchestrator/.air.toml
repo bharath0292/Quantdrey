@@ -1,6 +1,7 @@
 [build]
     cmd = "go build -o ./tmp/main.exe main.go"
     bin = "tmp/main.exe"
+    full_bin = "GIN_MODE=debug ./tmp/main.exe"
     include_ext = ["go"]
     exclude_dir = ["cert", "logs", "tmp"]
     delay = 1000

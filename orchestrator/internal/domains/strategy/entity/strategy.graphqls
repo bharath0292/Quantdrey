@@ -108,11 +108,11 @@ input StrategyRuleInput {
 }
 
 type Strategy {
-    id: ID!
+    id: BsonId!
     name: String!
     userId: ID!
-    startTime: Time!
-    endTime: Time!
+    startTime: String!
+    endTime: String!
     createdAt: Time
     maxTransactionPerDay: Int
     maxProfit: Float

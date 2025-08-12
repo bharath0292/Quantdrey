@@ -698,13 +698,10 @@ input IndicatorParamsInput {
     bb: BbParamsInput
 }
 `, BuiltIn: false},
-	{Name: "../../internal/domains/strategy/dto/schema.graphqls", Input: `scalar Time
-
-input NewStrategy {
+	{Name: "../../internal/domains/strategy/dto/schema.graphqls", Input: `input NewStrategy {
     name: String!
-    userId: ID!
-    startTime: Time!
-    endTime: Time!
+    startTime: String!
+    endTime: String!
     rule: StrategyRuleInput
     maxTransactionPerDay: Int
     maxProfit: Float
@@ -821,11 +818,11 @@ input StrategyRuleInput {
 }
 
 type Strategy {
-    id: ID!
+    id: BsonId!
     name: String!
     userId: ID!
-    startTime: Time!
-    endTime: Time!
+    startTime: String!
+    endTime: String!
     createdAt: Time
     maxTransactionPerDay: Int
     maxProfit: Float
@@ -839,6 +836,9 @@ type Query {
 type Mutation {
     createStrategy(input: NewStrategy!): Strategy!
 }
+`, BuiltIn: false},
+	{Name: "../scalars/scalars.graphqls", Input: `scalar BsonId
+scalar Time
 `, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

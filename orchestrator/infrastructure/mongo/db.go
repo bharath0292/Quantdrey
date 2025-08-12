@@ -5,6 +5,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/rs/zerolog/log"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -19,6 +21,7 @@ type MongoConfig struct {
 
 type MongoClient struct {
 	client *mongo.Client
+	db     *mongo.Database
 }
 
 func NewMongoClient(ctx context.Context, config MongoConfig) (*MongoClient, error) {
@@ -49,11 +52,39 @@ func NewMongoClient(ctx context.Context, config MongoConfig) (*MongoClient, erro
 	if err != nil {
 		return nil, err
 	}
-	return &MongoClient{client}, nil
+	return &MongoClient{client, client.Database("quantdrey")}, nil
 }
 
-func (c *MongoClient) CreateDocument() error {
-	return nil
+func (c *MongoClient) CreateDocument(ctx context.Context, collection string, document any, out any) (bson.ObjectID, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	coll := c.db.Collection(collection)
+
+	result, err := coll.InsertOne(ctx, document)
+	if err != nil {
+		log.Error().Err(err).Str("collection", collection).Msg("Failed to insert document")
+		return bson.NilObjectID, err
+	}
+
+	oid, ok := result.InsertedID.(bson.ObjectID)
+	if !ok {
+		log.Error().Msg("InsertedID is not an ObjectID")
+		return bson.NilObjectID, mongo.ErrNilDocument
+	}
+
+	if out != nil {
+		err = coll.FindOne(ctx, bson.M{"_id": oid}).Decode(out)
+		if err != nil {
+			log.Error().Err(err).
+				Str("collection", collection).
+				Str("insertedId", oid.Hex()).
+				Msg("Failed to fetch inserted document")
+			return bson.NilObjectID, err
+		}
+	}
+
+	return oid, nil
 }
 
 func (c *MongoClient) UpdateDocument() error {

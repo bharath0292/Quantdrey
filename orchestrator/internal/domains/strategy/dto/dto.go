@@ -1,16 +1,13 @@
 package strategydto
 
 import (
-	"time"
-
 	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
 )
 
 type NewStrategy struct {
 	Name                 string
-	UserId               string
-	StartTime            time.Time
-	EndTime              time.Time
+	StartTime            string
+	EndTime              string
 	Rule                 strategyentity.StrategyRule
 	MaxTransactionPerDay *int
 	MaxProfit            *float64
@@ -18,10 +15,10 @@ type NewStrategy struct {
 }
 
 type UpdateStrategy struct {
-	StrategyId           string
-	StartTime            time.Time
-	EndTime              time.Time
-	Rule                 strategyentity.StrategyRule
+	StrategyId           *string
+	StartTime            *string
+	EndTime              *string
+	Rule                 *strategyentity.StrategyRule
 	MaxTransactionPerDay *int
 	MaxProfit            *float64
 	MaxLoss              *float64

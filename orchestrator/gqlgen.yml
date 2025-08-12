@@ -2,6 +2,7 @@
 schema:
   - pkg/**/*.graphqls
   - internal/**/*.graphqls
+  - graph/scalars/*.graphqls
   # - internal/domains/indicators/indicators.graphqls
   # - internal/domains/strategy/strategy.graphqls
 
@@ -143,7 +144,9 @@ models:
   UUID:
     model:
       - github.com/99designs/gqlgen/graphql.UUID
-
+  BsonId:
+    model:
+      - github.com/bharath0292/quantdrey/graph/scalars.BsonId
   # The GraphQL spec explicitly states that the Int type is a signed 32-bit
   # integer. Using Go int or int64 to represent it can lead to unexpected
   # behavior, and some GraphQL tools like Apollo Router will fail when

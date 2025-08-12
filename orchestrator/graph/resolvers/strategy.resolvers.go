@@ -7,7 +7,6 @@ package resolver
 import (
 	"context"
 	"fmt"
-	"time"
 
 	graph "github.com/bharath0292/quantdrey/graph/generated"
 	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
@@ -16,24 +15,13 @@ import (
 
 // CreateStrategy is the resolver for the createStrategy field.
 func (r *mutationResolver) CreateStrategy(ctx context.Context, input strategydto.NewStrategy) (*strategyentity.Strategy, error) {
-	_ = r.strategyService.CreateStrategy(&input)
-
-	now := time.Now()
-	a := strategyentity.Strategy{
-		Id:                   1,
-		Name:                 input.Name,
-		UserId:               input.UserId,
-		StartTime:            input.StartTime,
-		EndTime:              input.EndTime,
-		Rule:                 input.Rule,
-		CreatedAt:            &now,
-		UpdatedAt:            &now,
-		MaxTransactionPerDay: input.MaxTransactionPerDay,
-		MaxProfit:            input.MaxProfit,
-		MaxLoss:              input.MaxLoss,
+	userId := 1
+	createdStrategy, err := r.strategyService.CreateStrategy(ctx, userId, &input)
+	if err != nil {
+		return nil, err
 	}
 
-	return &a, nil
+	return createdStrategy, nil
 }
 
 // ListAllStrategy is the resolver for the listAllStrategy field.

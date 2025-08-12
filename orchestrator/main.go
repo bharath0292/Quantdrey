@@ -45,12 +45,12 @@ func init() {
 			log.Fatal().Msgf("Could not get working directory: %v", err)
 		}
 
-		filesToTry := []string{
+		filesToLook := []string{
 			filepath.Join(cwd, ".env"),
 			filepath.Join(filepath.Dir(cwd), ".env"),
 		}
 
-		if err := godotenv.Load(filesToTry...); err != nil {
+		if err := godotenv.Load(filesToLook...); err != nil {
 			log.Fatal().Err(err).Msg("Error loading .env files")
 		}
 	}
