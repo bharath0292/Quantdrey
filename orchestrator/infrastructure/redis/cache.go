@@ -28,6 +28,10 @@ func NewRedisClient(ctx context.Context, config RedisConfig) (*RedisClient, erro
 	return &RedisClient{client: client}, nil
 }
 
+func (r *RedisClient) Close() {
+	r.client.Close()
+}
+
 func (r *RedisClient) KeyExists(key string) (bool, error) {
 	ctx := context.Background()
 	cmd := r.client.B().Exists().Key(key).Build()

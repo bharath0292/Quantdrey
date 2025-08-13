@@ -51,13 +51,12 @@ func NewNatsClient(config NatsConfig) (*NatsClient, error) {
 	}, nil
 }
 
-func (nc *NatsClient) GetClient() (*nats.Conn, error) {
-	return nc.client.Get()
-}
-
 func (nc *NatsClient) Close() {
 	nc.client.DisconnectAll()
-	nc.client = nil
+}
+
+func (nc *NatsClient) GetClient() (*nats.Conn, error) {
+	return nc.client.Get()
 }
 
 func (nc *NatsClient) Subscribe(subjectHandlers map[string]MessageHandler) {

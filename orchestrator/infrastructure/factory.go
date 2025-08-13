@@ -3,6 +3,7 @@ package factory
 import (
 	"context"
 	"fmt"
+	"time"
 
 	mongoFactory "github.com/bharath0292/quantdrey/infrastructure/mongo"
 	natsfactory "github.com/bharath0292/quantdrey/infrastructure/nats"
@@ -61,4 +62,19 @@ func NewFactory(ctx context.Context, configs FactoryConfig) (*Factory, error) {
 		PostgresClient: postgresClient,
 		MongoClient:    mongoClient,
 	}, nil
+}
+
+func (f *Factory) Close() error {
+	f.RedisClient.Close()
+	f.NatsClient.Close()
+	f.PostgresClient.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := f.MongoClient.Close(ctx); err != nil {
+		return fmt.Errorf("mongo disconnect: %w", err)
+	}
+
+	log.Info().Msg("Factories disconnected")
+	return nil
 }

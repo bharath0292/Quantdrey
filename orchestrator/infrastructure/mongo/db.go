@@ -55,6 +55,14 @@ func NewMongoClient(ctx context.Context, config MongoConfig) (*MongoClient, erro
 	return &MongoClient{client, client.Database("quantdrey")}, nil
 }
 
+func (c *MongoClient) Close(ctx context.Context) error {
+	err := c.client.Disconnect(ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (c *MongoClient) CreateDocument(ctx context.Context, collection string, document any, out any) (bson.ObjectID, error) {
 	coll := c.db.Collection(collection)
 

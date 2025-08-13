@@ -1,5 +1,15 @@
-# 📝 TODO — Strategy Domain Improvements
+# 📝 TODO
 
+## Global Improvements
+- [ ] **Graceful Shutdowns**
+  - Implement graceful shutdowns for the application.
+  - Ensure all resources are properly released and connections are closed.
+
+- [ ] **Remove Unwanted, Unnecessary Context**
+  - Remove any unnecessary context from the codebase.
+  - Ensure that context is only used where necessary.
+
+## Strategy Domain Improvements
 - [ ] **Custom Validation for Strategy Domain (CRU)**
   - Add validation rules for all `Strategy` fields.
   - Ensure nested entities are validated, including:
