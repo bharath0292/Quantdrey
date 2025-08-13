@@ -1,0 +1,118 @@
+# -------------- CREATE -------------------
+input CreateIndicatorField {
+    name: Indicator!
+    params: CreateIndicatorParams!
+}
+
+input CreateOperand {
+    type: ValueType!
+    indicatorField: CreateIndicatorField
+    priceField: PriceField
+    constantField: Float
+    offset: Int
+}
+
+input CreateCondition {
+    left: CreateOperand!
+    operator: ComparisonOperator!
+    right: CreateOperand!
+}
+
+input CreateLogicalGroup {
+    operator: LogicalOperator!
+    expressions: [CreateExpression!]!
+}
+
+input CreateExpression {
+    condition: CreateCondition
+    logical: CreateLogicalGroup
+}
+
+input CreateSymbolRule {
+    lookUpSymbol: String!
+    instrument: Instrument!
+    orderSymbol: String!
+    expiry: String
+    lotSize: Int!
+}
+
+input CreateStrategyRule {
+    symbol: CreateSymbolRule!
+    transaction: Transaction!
+    profit: Float
+    loss: Float
+    entryLogic: CreateExpression
+    exitLogic: CreateExpression
+}
+
+input CreateStrategy {
+    name: String!
+    startTime: String!
+    endTime: String!
+    rule: CreateStrategyRule!
+    maxTransactionPerDay: Int
+    maxProfit: Float
+    maxLoss: Float
+}
+
+# -------------- UPDATE -------------------
+input UpdateIndicatorField {
+    name: Indicator
+    params: UpdateIndicatorParams
+}
+
+input UpdateOperand {
+    type: ValueType
+    indicatorField: UpdateIndicatorField
+    priceField: PriceField
+    constantField: Float
+    offset: Int
+}
+
+input UpdateCondition {
+    left: UpdateOperand
+    operator: ComparisonOperator
+    right: UpdateOperand
+}
+
+input UpdateLogicalGroup {
+    operator: LogicalOperator
+    expressions: [UpdateExpression]
+}
+
+input UpdateExpression {
+    condition: UpdateCondition
+    logical: UpdateLogicalGroup
+}
+
+input UpdateSymbolRule {
+    lookUpSymbol: String
+    instrument: Instrument
+    orderSymbol: String
+    expiry: String
+    lotSize: Int
+}
+
+input UpdateStrategyRule {
+    symbol: UpdateSymbolRule
+    transaction: Transaction
+    profit: Float
+    loss: Float
+    entryLogic: UpdateExpression
+    exitLogic: UpdateExpression
+}
+
+input UpdateStrategy {
+    name: String
+    startTime: String
+    endTime: String
+    rule: UpdateStrategyRule
+    maxTransactionPerDay: Int
+    maxProfit: Float
+    maxLoss: Float
+}
+
+type Mutation {
+    createStrategy(userId: ID!, input: CreateStrategy!): Strategy!
+    updateStrategy(strategyId: BsonId!, input: UpdateStrategy!): Strategy!
+}

@@ -128,4 +128,99 @@ func (ec *executionContext) marshalNTransaction2githubᚗcomᚋbharath0292ᚋqua
 	return res
 }
 
+func (ec *executionContext) unmarshalOComparisonOperator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋoperatorsᚐComparisonOperator(ctx context.Context, v any) (*operators.ComparisonOperator, error) {
+	if v == nil {
+		return nil, nil
+	}
+	tmp, err := graphql.UnmarshalString(v)
+	res := operators.ComparisonOperator(tmp)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOComparisonOperator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋoperatorsᚐComparisonOperator(ctx context.Context, sel ast.SelectionSet, v *operators.ComparisonOperator) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(string(*v))
+	return res
+}
+
+func (ec *executionContext) unmarshalOIndicator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋindicatorsᚐIndicator(ctx context.Context, v any) (*indicators.Indicator, error) {
+	if v == nil {
+		return nil, nil
+	}
+	tmp, err := graphql.UnmarshalString(v)
+	res := indicators.Indicator(tmp)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOIndicator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋindicatorsᚐIndicator(ctx context.Context, sel ast.SelectionSet, v *indicators.Indicator) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(string(*v))
+	return res
+}
+
+func (ec *executionContext) unmarshalOInstrument2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋinstrumentsᚐInstrument(ctx context.Context, v any) (*instrumenttypes.Instrument, error) {
+	if v == nil {
+		return nil, nil
+	}
+	tmp, err := graphql.UnmarshalString(v)
+	res := instrumenttypes.Instrument(tmp)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInstrument2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋinstrumentsᚐInstrument(ctx context.Context, sel ast.SelectionSet, v *instrumenttypes.Instrument) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(string(*v))
+	return res
+}
+
+func (ec *executionContext) unmarshalOLogicalOperator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋoperatorsᚐLogicalOperator(ctx context.Context, v any) (*operators.LogicalOperator, error) {
+	if v == nil {
+		return nil, nil
+	}
+	tmp, err := graphql.UnmarshalString(v)
+	res := operators.LogicalOperator(tmp)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOLogicalOperator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋoperatorsᚐLogicalOperator(ctx context.Context, sel ast.SelectionSet, v *operators.LogicalOperator) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(string(*v))
+	return res
+}
+
+func (ec *executionContext) unmarshalOTransaction2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋtransactionsᚐTransaction(ctx context.Context, v any) (*transactiontypes.Transaction, error) {
+	if v == nil {
+		return nil, nil
+	}
+	tmp, err := graphql.UnmarshalString(v)
+	res := transactiontypes.Transaction(tmp)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTransaction2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋtransactionsᚐTransaction(ctx context.Context, sel ast.SelectionSet, v *transactiontypes.Transaction) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(string(*v))
+	return res
+}
+
 // endregion ***************************** type.gotpl *****************************

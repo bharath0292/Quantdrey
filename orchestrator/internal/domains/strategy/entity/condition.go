@@ -9,6 +9,12 @@ import (
 	"github.com/bharath0292/quantdrey/pkg/enums/operators"
 )
 
+type UpdateCondition struct {
+	Left     *UpdateOperand                `bson:"left"`
+	Operator *operators.ComparisonOperator `bson:"operator"`
+	Right    *UpdateOperand                `bson:"right"`
+}
+
 type Condition struct {
 	Left     Operand                      `bson:"left"`
 	Operator operators.ComparisonOperator `bson:"operator"`

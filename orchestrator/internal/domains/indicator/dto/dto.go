@@ -8,3 +8,8 @@ type IndicatorParams struct {
 	Rsi *indicatorcollection.RsiParams
 	Bb  *indicatorcollection.BbParams
 }
+
+type UpdateIndicatorParams struct {
+	Rsi *indicatorcollection.UpdateRsiParams
+	Bb  *indicatorcollection.UpdateBbParams
+}

@@ -50,11 +50,11 @@ resolver:
   filename_template: "{name}.resolvers.go"
 
   # Optional: turn on to not generate template comments above resolvers
-  # omit_template_comment: false
+  omit_template_comment: true
   # Optional: Pass in a path to a new gotpl template to use for generating resolvers
   # resolver_template: [your/path/resolver.gotpl]
   # Optional: turn on to avoid rewriting existing resolver(s) when generating
-  # preserve_resolver: false
+  preserve_resolver: true
 
 # Optional: turn on use ` + "`" + `gqlgen:"fieldName"` + "`" + ` tags in your models
 # struct_tag: json
@@ -135,7 +135,7 @@ autobind:
 models:
   ID:
     model:
-      - github.com/99designs/gqlgen/graphql.ID
+      # - github.com/99designs/gqlgen/graphql.ID
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
@@ -186,24 +186,31 @@ models:
   BbOutput:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.BbOutput
-  BbParamsInput:
-    model:
-      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.BbParams
   BbParams:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.BbParams
+  CreateBbParams:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.BbParams
+  UpdateBbParams:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.UpdateBbParams
   Bb:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.Bb
-  Output:
+
+  RsiOutput:
     model:
-      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.Output
-  RsiParamsInput:
-    model:
-      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.RsiParams
+      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.RsiOutput
   RsiParams:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.RsiParams
+  CreateRsiParams:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.RsiParams
+  UpdateRsiParams:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.UpdateRsiParams
   Rsi:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/collection.Rsi
@@ -211,9 +218,12 @@ models:
   IndicatorParams:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/dto.IndicatorParams
-  IndicatorParamsInput:
+  CreateIndicatorParams:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/indicator/dto.IndicatorParams
+  UpdateIndicatorParams:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/indicator/dto.UpdateIndicatorParams
 
   # -- Strategy --
   ValueType:
@@ -228,47 +238,75 @@ models:
   Operand:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Operand
-  IndicatorFieldInput:
+  CreateIndicatorField:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.IndicatorField
-  OperandInput:
+  CreateOperand:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Operand
+  UpdateIndicatorField:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateIndicatorField
+  UpdateOperand:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateOperand
 
   Condition:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Condition
-  ConditionInput:
+  CreateCondition:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Condition
+  UpdateCondition:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateCondition
+
   LogicalGroup:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.LogicalGroup
-  LogicalGroupInput:
+  CreateLogicalGroup:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.LogicalGroup
+  UpdateLogicalGroup:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateLogicalGroup
+
   Expression:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Expression
-  ExpressionInput:
+  CreateExpression:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Expression
+  UpdateExpression:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateExpression
 
-  SymbolRuleInput:
-    model:
-      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.SymbolRule
-  StrategyRuleInput:
-    model:
-      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.StrategyRule
   SymbolRule:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.SymbolRule
+  CreateSymbolRule:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.SymbolRule
+  UpdateSymbolRule:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateSymbolRule
+
   StrategyRule:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.StrategyRule
+  CreateStrategyRule:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.StrategyRule
+  UpdateStrategyRule:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.UpdateStrategyRule
+
   Strategy:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/strategy/entity.Strategy
-  NewStrategy:
+  CreateStrategy:
     model:
-      - github.com/bharath0292/quantdrey/internal/domains/strategy/dto.NewStrategy
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/dto.CreateStrategy
+  UpdateStrategy:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/strategy/dto.UpdateStrategy

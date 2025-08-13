@@ -7,9 +7,14 @@ import (
 	"github.com/bharath0292/quantdrey/pkg/enums/operators"
 )
 
+type UpdateLogicalGroup struct {
+	Operator    *operators.LogicalOperator `bson:"operator"`
+	Expressions []*UpdateExpression        `bson:"expressions"`
+}
+
 type LogicalGroup struct {
-	Operator    operators.LogicalOperator `bson:"operator" json:"operator"`
-	Expressions []Expression              `bson:"expressions" json:"expressions"`
+	Operator    operators.LogicalOperator `bson:"operator"`
+	Expressions []Expression              `bson:"expressions"`
 }
 
 func (e *LogicalGroup) Evaluate(bar *tickentity.Bar) (bool, error) {

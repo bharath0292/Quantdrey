@@ -1,9 +1,0 @@
-input NewStrategy {
-    name: String!
-    startTime: String!
-    endTime: String!
-    rule: StrategyRuleInput
-    maxTransactionPerDay: Int
-    maxProfit: Float
-    maxLoss: Float
-}

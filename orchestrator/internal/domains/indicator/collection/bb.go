@@ -20,6 +20,12 @@ type BbParams struct {
 	Output BbOutput `bson:"output"`
 }
 
+type UpdateBbParams struct {
+	Period *int      `bson:"period"`
+	StdDev *int      `bson:"stddev"`
+	Output *BbOutput `bson:"output"`
+}
+
 type Bb struct {
 	Upper  float64
 	Middle float64

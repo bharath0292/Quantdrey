@@ -8,6 +8,7 @@ import (
 	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type strategyService struct {
@@ -16,9 +17,9 @@ type strategyService struct {
 }
 
 type IStrategyService interface {
-	CreateStrategy(ctx context.Context, userId int, input *strategydto.NewStrategy) (*strategyentity.Strategy, error)
-	UpdateStrategy(ctx context.Context, input *strategydto.NewStrategy) error
-	RunStrategy(strategyId int) error
+	CreateStrategy(ctx context.Context, userId int, input *strategydto.CreateStrategy) (*strategyentity.Strategy, error)
+	UpdateStrategy(ctx context.Context, strategyId bson.ObjectID, input *strategydto.UpdateStrategy) (*strategyentity.Strategy, error)
+	RunStrategy(strategyId bson.ObjectID) error
 }
 
 func NewStrategyService(
@@ -28,24 +29,29 @@ func NewStrategyService(
 	return &strategyService{tickService, strategyRepository}
 }
 
-func (s *strategyService) CreateStrategy(ctx context.Context, userId int, input *strategydto.NewStrategy) (*strategyentity.Strategy, error) {
+func (s *strategyService) CreateStrategy(ctx context.Context, userId int, input *strategydto.CreateStrategy) (*strategyentity.Strategy, error) {
 	now := time.Now()
 	newStrategy := strategyentity.Strategy{
-		Name:      input.Name,
-		UserId:    userId,
-		StartTime: input.StartTime,
-		EndTime:   input.EndTime,
-		Rule:      input.Rule,
-		CreatedAt: &now,
+		Name:                 input.Name,
+		StartTime:            input.StartTime,
+		EndTime:              input.EndTime,
+		Rule:                 input.Rule,
+		CreatedAt:            &now,
+		MaxTransactionPerDay: input.MaxTransactionPerDay,
+		MaxProfit:            input.MaxProfit,
+		MaxLoss:              input.MaxLoss,
 	}
+
 	return s.strategyRepository.CreateStrategy(ctx, &newStrategy)
 }
 
-func (s *strategyService) UpdateStrategy(ctx context.Context, strat *strategydto.NewStrategy) error {
-	return s.strategyRepository.UpdateStrategy(ctx, strat)
+func (s *strategyService) UpdateStrategy(ctx context.Context, strategyId bson.ObjectID, input *strategydto.UpdateStrategy) (*strategyentity.Strategy, error) {
+	updateBson := input.ToUpdateBson()
+
+	return s.strategyRepository.UpdateStrategy(ctx, strategyId, updateBson)
 }
 
-func (s *strategyService) RunStrategy(strategyId int) error {
+func (s *strategyService) RunStrategy(strategyId bson.ObjectID) error {
 	// bar := s.tickService.GetLatestTick(strat.Rule.Symbol.LookUpSymbol)
 	// _, err := strat.Rule.EntryLogic.Evaluate(bar)
 	// if err != nil {

@@ -4,7 +4,6 @@ package graph
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strconv"
 	"sync/atomic"
@@ -12,7 +11,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	indicatorcollection "github.com/bharath0292/quantdrey/internal/domains/indicator/collection"
 	indicatordto "github.com/bharath0292/quantdrey/internal/domains/indicator/dto"
-	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -29,270 +27,6 @@ import (
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
-
-func (ec *executionContext) _Bb_upper(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.Bb) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Bb_upper(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Upper, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Bb_upper(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Bb",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Bb_middle(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.Bb) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Bb_middle(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Middle, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Bb_middle(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Bb",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Bb_lower(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.Bb) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Bb_lower(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Lower, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Bb_lower(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Bb",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BbParams_period(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.BbParams) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BbParams_period(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Period, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BbParams_period(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BbParams",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BbParams_stddev(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.BbParams) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BbParams_stddev(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.StdDev, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BbParams_stddev(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BbParams",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _BbParams_output(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.BbParams) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_BbParams_output(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Output, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(indicatorcollection.BbOutput)
-	fc.Result = res
-	return ec.marshalNBbOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbOutput(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_BbParams_output(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "BbParams",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type BbOutput does not have child fields")
-		},
-	}
-	return fc, nil
-}
 
 func (ec *executionContext) _IndicatorParams_rsi(ctx context.Context, field graphql.CollectedField, obj *indicatordto.IndicatorParams) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_IndicatorParams_rsi(ctx, field)
@@ -390,184 +124,11 @@ func (ec *executionContext) fieldContext_IndicatorParams_bb(_ context.Context, f
 	return fc, nil
 }
 
-func (ec *executionContext) _Rsi_rsi(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.Rsi) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Rsi_rsi(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Rsi, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Rsi_rsi(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Rsi",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RsiParams_period(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.RsiParams) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RsiParams_period(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Period, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RsiParams_period(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RsiParams",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _RsiParams_output(ctx context.Context, field graphql.CollectedField, obj *indicatorcollection.RsiParams) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_RsiParams_output(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Output, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(indicatorcollection.Output)
-	fc.Result = res
-	return ec.marshalNOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐOutput(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_RsiParams_output(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "RsiParams",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Output does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputBbParamsInput(ctx context.Context, obj any) (indicatorcollection.BbParams, error) {
-	var it indicatorcollection.BbParams
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"period", "stddev", "output"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "period":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Period = data
-		case "stddev":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("stddev"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.StdDev = data
-		case "output":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output"))
-			data, err := ec.unmarshalNBbOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbOutput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Output = data
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputIndicatorParamsInput(ctx context.Context, obj any) (indicatordto.IndicatorParams, error) {
+func (ec *executionContext) unmarshalInputCreateIndicatorParams(ctx context.Context, obj any) (indicatordto.IndicatorParams, error) {
 	var it indicatordto.IndicatorParams
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -583,14 +144,14 @@ func (ec *executionContext) unmarshalInputIndicatorParamsInput(ctx context.Conte
 		switch k {
 		case "rsi":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rsi"))
-			data, err := ec.unmarshalORsiParamsInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐRsiParams(ctx, v)
+			data, err := ec.unmarshalOCreateRsiParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐRsiParams(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Rsi = data
 		case "bb":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bb"))
-			data, err := ec.unmarshalOBbParamsInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbParams(ctx, v)
+			data, err := ec.unmarshalOCreateBbParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbParams(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -601,103 +162,34 @@ func (ec *executionContext) unmarshalInputIndicatorParamsInput(ctx context.Conte
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputNewStrategy(ctx context.Context, obj any) (strategydto.NewStrategy, error) {
-	var it strategydto.NewStrategy
+func (ec *executionContext) unmarshalInputUpdateIndicatorParams(ctx context.Context, obj any) (indicatordto.UpdateIndicatorParams, error) {
+	var it indicatordto.UpdateIndicatorParams
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "startTime", "endTime", "rule", "maxTransactionPerDay", "maxProfit", "maxLoss"}
+	fieldsInOrder := [...]string{"rsi", "bb"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "name":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+		case "rsi":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rsi"))
+			data, err := ec.unmarshalOUpdateRsiParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐUpdateRsiParams(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Name = data
-		case "startTime":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startTime"))
-			data, err := ec.unmarshalNString2string(ctx, v)
+			it.Rsi = data
+		case "bb":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("bb"))
+			data, err := ec.unmarshalOUpdateBbParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐUpdateBbParams(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.StartTime = data
-		case "endTime":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endTime"))
-			data, err := ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EndTime = data
-		case "rule":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rule"))
-			data, err := ec.unmarshalOStrategyRuleInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategyRule(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Rule = data
-		case "maxTransactionPerDay":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxTransactionPerDay"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.MaxTransactionPerDay = data
-		case "maxProfit":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxProfit"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.MaxProfit = data
-		case "maxLoss":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLoss"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.MaxLoss = data
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputRsiParamsInput(ctx context.Context, obj any) (indicatorcollection.RsiParams, error) {
-	var it indicatorcollection.RsiParams
-	asMap := map[string]any{}
-	for k, v := range obj.(map[string]any) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"period", "output"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "period":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("period"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Period = data
-		case "output":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("output"))
-			data, err := ec.unmarshalNOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐOutput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Output = data
+			it.Bb = data
 		}
 	}
 
@@ -711,104 +203,6 @@ func (ec *executionContext) unmarshalInputRsiParamsInput(ctx context.Context, ob
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var bbImplementors = []string{"Bb"}
-
-func (ec *executionContext) _Bb(ctx context.Context, sel ast.SelectionSet, obj *indicatorcollection.Bb) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, bbImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Bb")
-		case "upper":
-			out.Values[i] = ec._Bb_upper(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "middle":
-			out.Values[i] = ec._Bb_middle(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "lower":
-			out.Values[i] = ec._Bb_lower(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var bbParamsImplementors = []string{"BbParams"}
-
-func (ec *executionContext) _BbParams(ctx context.Context, sel ast.SelectionSet, obj *indicatorcollection.BbParams) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, bbParamsImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("BbParams")
-		case "period":
-			out.Values[i] = ec._BbParams_period(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "stddev":
-			out.Values[i] = ec._BbParams_stddev(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "output":
-			out.Values[i] = ec._BbParams_output(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
 
 var indicatorParamsImplementors = []string{"IndicatorParams"}
 
@@ -848,168 +242,24 @@ func (ec *executionContext) _IndicatorParams(ctx context.Context, sel ast.Select
 	return out
 }
 
-var rsiImplementors = []string{"Rsi"}
-
-func (ec *executionContext) _Rsi(ctx context.Context, sel ast.SelectionSet, obj *indicatorcollection.Rsi) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, rsiImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Rsi")
-		case "rsi":
-			out.Values[i] = ec._Rsi_rsi(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var rsiParamsImplementors = []string{"RsiParams"}
-
-func (ec *executionContext) _RsiParams(ctx context.Context, sel ast.SelectionSet, obj *indicatorcollection.RsiParams) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, rsiParamsImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("RsiParams")
-		case "period":
-			out.Values[i] = ec._RsiParams_period(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "output":
-			out.Values[i] = ec._RsiParams_output(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNBbOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbOutput(ctx context.Context, v any) (indicatorcollection.BbOutput, error) {
-	tmp, err := graphql.UnmarshalString(v)
-	res := indicatorcollection.BbOutput(tmp)
+func (ec *executionContext) unmarshalNCreateIndicatorParams2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐIndicatorParams(ctx context.Context, v any) (indicatordto.IndicatorParams, error) {
+	res, err := ec.unmarshalInputCreateIndicatorParams(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNBbOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbOutput(ctx context.Context, sel ast.SelectionSet, v indicatorcollection.BbOutput) graphql.Marshaler {
-	_ = sel
-	res := graphql.MarshalString(string(v))
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
 }
 
 func (ec *executionContext) marshalNIndicatorParams2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐIndicatorParams(ctx context.Context, sel ast.SelectionSet, v indicatordto.IndicatorParams) graphql.Marshaler {
 	return ec._IndicatorParams(ctx, sel, &v)
 }
 
-func (ec *executionContext) unmarshalNIndicatorParamsInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐIndicatorParams(ctx context.Context, v any) (indicatordto.IndicatorParams, error) {
-	res, err := ec.unmarshalInputIndicatorParamsInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNNewStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐNewStrategy(ctx context.Context, v any) (strategydto.NewStrategy, error) {
-	res, err := ec.unmarshalInputNewStrategy(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐOutput(ctx context.Context, v any) (indicatorcollection.Output, error) {
-	tmp, err := graphql.UnmarshalString(v)
-	res := indicatorcollection.Output(tmp)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNOutput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐOutput(ctx context.Context, sel ast.SelectionSet, v indicatorcollection.Output) graphql.Marshaler {
-	_ = sel
-	res := graphql.MarshalString(string(v))
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
-func (ec *executionContext) marshalOBbParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbParams(ctx context.Context, sel ast.SelectionSet, v *indicatorcollection.BbParams) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._BbParams(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOBbParamsInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐBbParams(ctx context.Context, v any) (*indicatorcollection.BbParams, error) {
+func (ec *executionContext) unmarshalOUpdateIndicatorParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐUpdateIndicatorParams(ctx context.Context, v any) (*indicatordto.UpdateIndicatorParams, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalInputBbParamsInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalORsiParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐRsiParams(ctx context.Context, sel ast.SelectionSet, v *indicatorcollection.RsiParams) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._RsiParams(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalORsiParamsInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋcollectionᚐRsiParams(ctx context.Context, v any) (*indicatorcollection.RsiParams, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputRsiParamsInput(ctx, v)
+	res, err := ec.unmarshalInputUpdateIndicatorParams(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

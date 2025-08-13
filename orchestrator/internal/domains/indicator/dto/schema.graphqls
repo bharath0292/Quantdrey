@@ -3,7 +3,12 @@ type IndicatorParams {
     bb: BbParams
 }
 
-input IndicatorParamsInput {
-    rsi: RsiParamsInput
-    bb: BbParamsInput
+input CreateIndicatorParams {
+    rsi: CreateRsiParams
+    bb: CreateBbParams
+}
+
+input UpdateIndicatorParams {
+    rsi: UpdateRsiParams
+    bb: UpdateBbParams
 }

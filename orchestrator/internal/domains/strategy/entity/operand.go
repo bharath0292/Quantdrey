@@ -20,6 +20,11 @@ type IndicatorField struct {
 	Params indicatordto.IndicatorParams `bson:"params"` // e.g., {"period": 14} or {"period": 20, "stddev": 2}
 }
 
+type UpdateIndicatorField struct {
+	Name   *indicators.Indicator               `bson:"name"`   // "rsi", "bb", "macd"
+	Params *indicatordto.UpdateIndicatorParams `bson:"params"` // e.g., {"period": 14} or {"period": 20, "stddev": 2}
+}
+
 type ValueType string
 
 const (
@@ -34,4 +39,12 @@ type Operand struct {
 	PriceField     *PriceField     `bson:"priceField,omitempty"` // if Type is price
 	ConstantField  *float64        `bson:"constant,omitempty"`   // if Type is constant
 	Offset         *int            `bson:"offset,omitempty"`     // e.g., -1 means previous candle
+}
+
+type UpdateOperand struct {
+	Type           *ValueType            `bson:"type"`
+	IndicatorField *UpdateIndicatorField `bson:"indicator,omitempty"`  // if Type is indicator
+	PriceField     *PriceField           `bson:"priceField,omitempty"` // if Type is price
+	ConstantField  *float64              `bson:"constant,omitempty"`   // if Type is constant
+	Offset         *int                  `bson:"offset,omitempty"`     // e.g., -1 means previous candle
 }

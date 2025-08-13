@@ -25,6 +25,5 @@ tmp
 build-errors.log
 logs/
 certs/*
-TODO.md
 scripts.txt
 strategy.txt

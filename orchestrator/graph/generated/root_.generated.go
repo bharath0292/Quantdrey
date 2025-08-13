@@ -13,6 +13,7 @@ import (
 	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // NewExecutableSchema creates an ExecutableSchema from the ResolverRoot interface.
@@ -80,7 +81,8 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateStrategy func(childComplexity int, input strategydto.NewStrategy) int
+		CreateStrategy func(childComplexity int, userID int, input strategydto.CreateStrategy) int
+		UpdateStrategy func(childComplexity int, strategyID bson.ObjectID, input strategydto.UpdateStrategy) int
 	}
 
 	Operand struct {
@@ -92,7 +94,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		ListAllStrategy func(childComplexity int, userID string) int
+		ListAllStrategy func(childComplexity int, userID int) int
 	}
 
 	Rsi struct {
@@ -282,7 +284,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateStrategy(childComplexity, args["input"].(strategydto.NewStrategy)), true
+		return e.complexity.Mutation.CreateStrategy(childComplexity, args["userId"].(int), args["input"].(strategydto.CreateStrategy)), true
+
+	case "Mutation.updateStrategy":
+		if e.complexity.Mutation.UpdateStrategy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateStrategy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateStrategy(childComplexity, args["strategyId"].(bson.ObjectID), args["input"].(strategydto.UpdateStrategy)), true
 
 	case "Operand.constantField":
 		if e.complexity.Operand.ConstantField == nil {
@@ -329,7 +343,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Query.ListAllStrategy(childComplexity, args["userId"].(string)), true
+		return e.complexity.Query.ListAllStrategy(childComplexity, args["userId"].(int)), true
 
 	case "Rsi.rsi":
 		if e.complexity.Rsi.Rsi == nil {
@@ -500,17 +514,28 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
-		ec.unmarshalInputBbParamsInput,
-		ec.unmarshalInputConditionInput,
-		ec.unmarshalInputExpressionInput,
-		ec.unmarshalInputIndicatorFieldInput,
-		ec.unmarshalInputIndicatorParamsInput,
-		ec.unmarshalInputLogicalGroupInput,
-		ec.unmarshalInputNewStrategy,
-		ec.unmarshalInputOperandInput,
-		ec.unmarshalInputRsiParamsInput,
-		ec.unmarshalInputStrategyRuleInput,
-		ec.unmarshalInputSymbolRuleInput,
+		ec.unmarshalInputCreateBbParams,
+		ec.unmarshalInputCreateCondition,
+		ec.unmarshalInputCreateExpression,
+		ec.unmarshalInputCreateIndicatorField,
+		ec.unmarshalInputCreateIndicatorParams,
+		ec.unmarshalInputCreateLogicalGroup,
+		ec.unmarshalInputCreateOperand,
+		ec.unmarshalInputCreateRsiParams,
+		ec.unmarshalInputCreateStrategy,
+		ec.unmarshalInputCreateStrategyRule,
+		ec.unmarshalInputCreateSymbolRule,
+		ec.unmarshalInputUpdateBbParams,
+		ec.unmarshalInputUpdateCondition,
+		ec.unmarshalInputUpdateExpression,
+		ec.unmarshalInputUpdateIndicatorField,
+		ec.unmarshalInputUpdateIndicatorParams,
+		ec.unmarshalInputUpdateLogicalGroup,
+		ec.unmarshalInputUpdateOperand,
+		ec.unmarshalInputUpdateRsiParams,
+		ec.unmarshalInputUpdateStrategy,
+		ec.unmarshalInputUpdateStrategyRule,
+		ec.unmarshalInputUpdateSymbolRule,
 	)
 	first := true
 
@@ -644,11 +669,7 @@ enum LogicalOperator {
     sell
 }
 `, BuiltIn: false},
-	{Name: "../../internal/domains/indicator/collection/schema.graphqls", Input: `enum Output {
-    value
-}
-
-################### Bollinger Band ####################
+	{Name: "../../internal/domains/indicator/collection/bb.graphqls", Input: `################### Bollinger Band ####################
 enum BbOutput {
     upper
     middler
@@ -661,10 +682,16 @@ type BbParams {
     output: BbOutput!
 }
 
-input BbParamsInput {
+input CreateBbParams {
     period: Int!
     stddev: Int!
     output: BbOutput!
+}
+
+input UpdateBbParams {
+    period: Int
+    stddev: Int
+    output: BbOutput
 }
 
 type Bb {
@@ -672,16 +699,25 @@ type Bb {
     middle: Float!
     lower: Float!
 }
-
-################### RSI ####################
-input RsiParamsInput {
-    period: Int!
-    output: Output!
+`, BuiltIn: false},
+	{Name: "../../internal/domains/indicator/collection/rsi.graphqls", Input: `################### RSI ####################
+enum RsiOutput {
+    value
 }
 
 type RsiParams {
     period: Int!
-    output: Output!
+    output: RsiOutput!
+}
+
+input CreateRsiParams {
+    period: Int!
+    output: RsiOutput!
+}
+
+input UpdateRsiParams {
+    period: Int
+    output: RsiOutput
 }
 
 type Rsi {
@@ -693,19 +729,132 @@ type Rsi {
     bb: BbParams
 }
 
-input IndicatorParamsInput {
-    rsi: RsiParamsInput
-    bb: BbParamsInput
+input CreateIndicatorParams {
+    rsi: CreateRsiParams
+    bb: CreateBbParams
+}
+
+input UpdateIndicatorParams {
+    rsi: UpdateRsiParams
+    bb: UpdateBbParams
 }
 `, BuiltIn: false},
-	{Name: "../../internal/domains/strategy/dto/schema.graphqls", Input: `input NewStrategy {
+	{Name: "../../internal/domains/strategy/dto/strategy.graphqls", Input: `# -------------- CREATE -------------------
+input CreateIndicatorField {
+    name: Indicator!
+    params: CreateIndicatorParams!
+}
+
+input CreateOperand {
+    type: ValueType!
+    indicatorField: CreateIndicatorField
+    priceField: PriceField
+    constantField: Float
+    offset: Int
+}
+
+input CreateCondition {
+    left: CreateOperand!
+    operator: ComparisonOperator!
+    right: CreateOperand!
+}
+
+input CreateLogicalGroup {
+    operator: LogicalOperator!
+    expressions: [CreateExpression!]!
+}
+
+input CreateExpression {
+    condition: CreateCondition
+    logical: CreateLogicalGroup
+}
+
+input CreateSymbolRule {
+    lookUpSymbol: String!
+    instrument: Instrument!
+    orderSymbol: String!
+    expiry: String
+    lotSize: Int!
+}
+
+input CreateStrategyRule {
+    symbol: CreateSymbolRule!
+    transaction: Transaction!
+    profit: Float
+    loss: Float
+    entryLogic: CreateExpression
+    exitLogic: CreateExpression
+}
+
+input CreateStrategy {
     name: String!
     startTime: String!
     endTime: String!
-    rule: StrategyRuleInput
+    rule: CreateStrategyRule!
     maxTransactionPerDay: Int
     maxProfit: Float
     maxLoss: Float
+}
+# -------------- UPDATE -------------------
+input UpdateIndicatorField {
+    name: Indicator
+    params: UpdateIndicatorParams
+}
+
+input UpdateOperand {
+    type: ValueType
+    indicatorField: UpdateIndicatorField
+    priceField: PriceField
+    constantField: Float
+    offset: Int
+}
+
+input UpdateCondition {
+    left: UpdateOperand
+    operator: ComparisonOperator
+    right: UpdateOperand
+}
+
+input UpdateLogicalGroup {
+    operator: LogicalOperator
+    expressions: [UpdateExpression]
+}
+
+input UpdateExpression {
+    condition: UpdateCondition
+    logical: UpdateLogicalGroup
+}
+
+input UpdateSymbolRule {
+    lookUpSymbol: String
+    instrument: Instrument
+    orderSymbol: String
+    expiry: String
+    lotSize: Int
+}
+
+input UpdateStrategyRule {
+    symbol: UpdateSymbolRule
+    transaction: Transaction
+    profit: Float
+    loss: Float
+    entryLogic: UpdateExpression
+    exitLogic: UpdateExpression
+}
+
+input UpdateStrategy {
+    name: String
+    startTime: String
+    endTime: String
+    rule: UpdateStrategyRule
+    maxTransactionPerDay: Int
+    maxProfit: Float
+    maxLoss: Float
+}
+
+type Mutation {
+    createStrategy(userId: ID!, input: CreateStrategy!): Strategy!
+    updateStrategy(strategyId: BsonId!, input: UpdateStrategy!): Strategy!
 }
 `, BuiltIn: false},
 	{Name: "../../internal/domains/strategy/entity/strategy.graphqls", Input: `enum ValueType {
@@ -769,54 +918,6 @@ type StrategyRule {
     exitLogic: Expression!
 }
 
-############### Mutation #####################
-
-input IndicatorFieldInput {
-    name: Indicator!
-    params: IndicatorParamsInput!
-}
-
-input OperandInput {
-    type: ValueType!
-    indicatorField: IndicatorFieldInput
-    priceField: PriceField
-    constantField: Float
-    offset: Int
-}
-
-input ConditionInput {
-    left: OperandInput!
-    operator: ComparisonOperator!
-    right: OperandInput!
-}
-
-input LogicalGroupInput {
-    operator: LogicalOperator!
-    expressions: [ExpressionInput!]!
-}
-
-input ExpressionInput {
-    condition: ConditionInput
-    logical: LogicalGroupInput
-}
-
-input SymbolRuleInput {
-    lookUpSymbol: String!
-    instrument: Instrument!
-    orderSymbol: String!
-    expiry: String
-    lotSize: Int!
-}
-
-input StrategyRuleInput {
-    symbol: SymbolRuleInput!
-    transaction: Transaction!
-    profit: Float
-    loss: Float
-    entryLogic: ExpressionInput
-    exitLogic: ExpressionInput
-}
-
 type Strategy {
     id: BsonId!
     name: String!
@@ -831,10 +932,6 @@ type Strategy {
 
 type Query {
     listAllStrategy(userId: ID!): Strategy!
-}
-
-type Mutation {
-    createStrategy(input: NewStrategy!): Strategy!
 }
 `, BuiltIn: false},
 	{Name: "../scalars/scalars.graphqls", Input: `scalar BsonId

@@ -56,9 +56,6 @@ func NewMongoClient(ctx context.Context, config MongoConfig) (*MongoClient, erro
 }
 
 func (c *MongoClient) CreateDocument(ctx context.Context, collection string, document any, out any) (bson.ObjectID, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
-
 	coll := c.db.Collection(collection)
 
 	result, err := coll.InsertOne(ctx, document)
@@ -87,6 +84,33 @@ func (c *MongoClient) CreateDocument(ctx context.Context, collection string, doc
 	return oid, nil
 }
 
-func (c *MongoClient) UpdateDocument() error {
-	return nil
+func (c *MongoClient) UpdateDocument(ctx context.Context, collection string, filter bson.M, update bson.M, out any) (bson.ObjectID, error) {
+	coll := c.db.Collection(collection)
+
+	result, err := coll.UpdateOne(ctx, filter, update)
+	if err != nil {
+		log.Error().Err(err).Str("collection", collection).Msg("Failed to update document")
+		return bson.NilObjectID, err
+	}
+
+	if result.MatchedCount == 0 {
+		log.Error().Str("collection", collection).Msg("No matching document found for update")
+		return bson.NilObjectID, mongo.ErrNoDocuments
+	}
+
+	oid := filter["_id"].(bson.ObjectID)
+
+	// Optionally fetch updated document
+	if out != nil {
+		err = coll.FindOne(ctx, bson.M{"_id": oid}).Decode(out)
+		if err != nil {
+			log.Error().Err(err).
+				Str("collection", collection).
+				Str("updatedId", oid.Hex()).
+				Msg("Failed to fetch updated document")
+			return bson.NilObjectID, err
+		}
+	}
+
+	return oid, nil
 }

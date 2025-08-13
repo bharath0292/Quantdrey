@@ -1,7 +1,3 @@
-enum Output {
-    value
-}
-
 ################### Bollinger Band ####################
 enum BbOutput {
     upper
@@ -15,29 +11,20 @@ type BbParams {
     output: BbOutput!
 }
 
-input BbParamsInput {
+input CreateBbParams {
     period: Int!
     stddev: Int!
     output: BbOutput!
+}
+
+input UpdateBbParams {
+    period: Int
+    stddev: Int
+    output: BbOutput
 }
 
 type Bb {
     upper: Float!
     middle: Float!
     lower: Float!
-}
-
-################### RSI ####################
-input RsiParamsInput {
-    period: Int!
-    output: Output!
-}
-
-type RsiParams {
-    period: Int!
-    output: Output!
-}
-
-type Rsi {
-    rsi: Float!
 }

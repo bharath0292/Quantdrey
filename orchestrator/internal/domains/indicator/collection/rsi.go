@@ -6,15 +6,20 @@ import (
 	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 )
 
-type Output string
+type RsiOutput string
 
 const (
-	Value Output = "value"
+	RsiOutputValue RsiOutput = "rsi"
 )
 
 type RsiParams struct {
-	Period int    `bson:"period"`
-	Output Output `bson:"output"`
+	Period int       `bson:"period"`
+	Output RsiOutput `bson:"output"`
+}
+
+type UpdateRsiParams struct {
+	Period *int       `bson:"period"`
+	Output *RsiOutput `bson:"output"`
 }
 
 type Rsi struct {

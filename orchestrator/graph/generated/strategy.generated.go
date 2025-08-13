@@ -27,10 +27,11 @@ import (
 // region    ************************** generated!.gotpl **************************
 
 type MutationResolver interface {
-	CreateStrategy(ctx context.Context, input strategydto.NewStrategy) (*strategyentity.Strategy, error)
+	CreateStrategy(ctx context.Context, userID int, input strategydto.CreateStrategy) (*strategyentity.Strategy, error)
+	UpdateStrategy(ctx context.Context, strategyID bson.ObjectID, input strategydto.UpdateStrategy) (*strategyentity.Strategy, error)
 }
 type QueryResolver interface {
-	ListAllStrategy(ctx context.Context, userID string) (*strategyentity.Strategy, error)
+	ListAllStrategy(ctx context.Context, userID int) (*strategyentity.Strategy, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -40,23 +41,82 @@ type QueryResolver interface {
 func (ec *executionContext) field_Mutation_createStrategy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createStrategy_argsInput(ctx, rawArgs)
+	arg0, err := ec.field_Mutation_createStrategy_argsUserID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["input"] = arg0
+	args["userId"] = arg0
+	arg1, err := ec.field_Mutation_createStrategy_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
+func (ec *executionContext) field_Mutation_createStrategy_argsUserID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+	if tmp, ok := rawArgs["userId"]; ok {
+		return ec.unmarshalNID2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Mutation_createStrategy_argsInput(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (strategydto.NewStrategy, error) {
+) (strategydto.CreateStrategy, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNNewStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐNewStrategy(ctx, tmp)
+		return ec.unmarshalNCreateStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐCreateStrategy(ctx, tmp)
 	}
 
-	var zeroVal strategydto.NewStrategy
+	var zeroVal strategydto.CreateStrategy
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateStrategy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_updateStrategy_argsStrategyID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["strategyId"] = arg0
+	arg1, err := ec.field_Mutation_updateStrategy_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_updateStrategy_argsStrategyID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (bson.ObjectID, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("strategyId"))
+	if tmp, ok := rawArgs["strategyId"]; ok {
+		return ec.unmarshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, tmp)
+	}
+
+	var zeroVal bson.ObjectID
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateStrategy_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (strategydto.UpdateStrategy, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNUpdateStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐUpdateStrategy(ctx, tmp)
+	}
+
+	var zeroVal strategydto.UpdateStrategy
 	return zeroVal, nil
 }
 
@@ -96,13 +156,13 @@ func (ec *executionContext) field_Query_listAllStrategy_args(ctx context.Context
 func (ec *executionContext) field_Query_listAllStrategy_argsUserID(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (string, error) {
+) (int, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
 	if tmp, ok := rawArgs["userId"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
+		return ec.unmarshalNID2int(ctx, tmp)
 	}
 
-	var zeroVal string
+	var zeroVal int
 	return zeroVal, nil
 }
 
@@ -568,7 +628,7 @@ func (ec *executionContext) _Mutation_createStrategy(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateStrategy(rctx, fc.Args["input"].(strategydto.NewStrategy))
+		return ec.resolvers.Mutation().CreateStrategy(rctx, fc.Args["userId"].(int), fc.Args["input"].(strategydto.CreateStrategy))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -623,6 +683,81 @@ func (ec *executionContext) fieldContext_Mutation_createStrategy(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createStrategy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateStrategy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateStrategy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateStrategy(rctx, fc.Args["strategyId"].(bson.ObjectID), fc.Args["input"].(strategydto.UpdateStrategy))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*strategyentity.Strategy)
+	fc.Result = res
+	return ec.marshalNStrategy2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategy(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateStrategy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Strategy_id(ctx, field)
+			case "name":
+				return ec.fieldContext_Strategy_name(ctx, field)
+			case "userId":
+				return ec.fieldContext_Strategy_userId(ctx, field)
+			case "startTime":
+				return ec.fieldContext_Strategy_startTime(ctx, field)
+			case "endTime":
+				return ec.fieldContext_Strategy_endTime(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Strategy_createdAt(ctx, field)
+			case "maxTransactionPerDay":
+				return ec.fieldContext_Strategy_maxTransactionPerDay(ctx, field)
+			case "maxProfit":
+				return ec.fieldContext_Strategy_maxProfit(ctx, field)
+			case "maxLoss":
+				return ec.fieldContext_Strategy_maxLoss(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Strategy", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateStrategy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -857,7 +992,7 @@ func (ec *executionContext) _Query_listAllStrategy(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ListAllStrategy(rctx, fc.Args["userId"].(string))
+		return ec.resolvers.Query().ListAllStrategy(rctx, fc.Args["userId"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1936,7 +2071,7 @@ func (ec *executionContext) fieldContext_SymbolRule_lotSize(_ context.Context, f
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputConditionInput(ctx context.Context, obj any) (strategyentity.Condition, error) {
+func (ec *executionContext) unmarshalInputCreateCondition(ctx context.Context, obj any) (strategyentity.Condition, error) {
 	var it strategyentity.Condition
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -1952,7 +2087,7 @@ func (ec *executionContext) unmarshalInputConditionInput(ctx context.Context, ob
 		switch k {
 		case "left":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("left"))
-			data, err := ec.unmarshalNOperandInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx, v)
+			data, err := ec.unmarshalNCreateOperand2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1966,7 +2101,7 @@ func (ec *executionContext) unmarshalInputConditionInput(ctx context.Context, ob
 			it.Operator = data
 		case "right":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("right"))
-			data, err := ec.unmarshalNOperandInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx, v)
+			data, err := ec.unmarshalNCreateOperand2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1977,7 +2112,7 @@ func (ec *executionContext) unmarshalInputConditionInput(ctx context.Context, ob
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputExpressionInput(ctx context.Context, obj any) (strategyentity.Expression, error) {
+func (ec *executionContext) unmarshalInputCreateExpression(ctx context.Context, obj any) (strategyentity.Expression, error) {
 	var it strategyentity.Expression
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -1993,14 +2128,14 @@ func (ec *executionContext) unmarshalInputExpressionInput(ctx context.Context, o
 		switch k {
 		case "condition":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("condition"))
-			data, err := ec.unmarshalOConditionInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐCondition(ctx, v)
+			data, err := ec.unmarshalOCreateCondition2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐCondition(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Condition = data
 		case "logical":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logical"))
-			data, err := ec.unmarshalOLogicalGroupInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐLogicalGroup(ctx, v)
+			data, err := ec.unmarshalOCreateLogicalGroup2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐLogicalGroup(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2011,7 +2146,7 @@ func (ec *executionContext) unmarshalInputExpressionInput(ctx context.Context, o
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputIndicatorFieldInput(ctx context.Context, obj any) (strategyentity.IndicatorField, error) {
+func (ec *executionContext) unmarshalInputCreateIndicatorField(ctx context.Context, obj any) (strategyentity.IndicatorField, error) {
 	var it strategyentity.IndicatorField
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -2034,7 +2169,7 @@ func (ec *executionContext) unmarshalInputIndicatorFieldInput(ctx context.Contex
 			it.Name = data
 		case "params":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
-			data, err := ec.unmarshalNIndicatorParamsInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐIndicatorParams(ctx, v)
+			data, err := ec.unmarshalNCreateIndicatorParams2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐIndicatorParams(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2045,7 +2180,7 @@ func (ec *executionContext) unmarshalInputIndicatorFieldInput(ctx context.Contex
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputLogicalGroupInput(ctx context.Context, obj any) (strategyentity.LogicalGroup, error) {
+func (ec *executionContext) unmarshalInputCreateLogicalGroup(ctx context.Context, obj any) (strategyentity.LogicalGroup, error) {
 	var it strategyentity.LogicalGroup
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -2068,7 +2203,7 @@ func (ec *executionContext) unmarshalInputLogicalGroupInput(ctx context.Context,
 			it.Operator = data
 		case "expressions":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expressions"))
-			data, err := ec.unmarshalNExpressionInput2ᚕgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpressionᚄ(ctx, v)
+			data, err := ec.unmarshalNCreateExpression2ᚕgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpressionᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2079,7 +2214,7 @@ func (ec *executionContext) unmarshalInputLogicalGroupInput(ctx context.Context,
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputOperandInput(ctx context.Context, obj any) (strategyentity.Operand, error) {
+func (ec *executionContext) unmarshalInputCreateOperand(ctx context.Context, obj any) (strategyentity.Operand, error) {
 	var it strategyentity.Operand
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -2102,7 +2237,7 @@ func (ec *executionContext) unmarshalInputOperandInput(ctx context.Context, obj 
 			it.Type = data
 		case "indicatorField":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("indicatorField"))
-			data, err := ec.unmarshalOIndicatorFieldInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐIndicatorField(ctx, v)
+			data, err := ec.unmarshalOCreateIndicatorField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐIndicatorField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2134,7 +2269,76 @@ func (ec *executionContext) unmarshalInputOperandInput(ctx context.Context, obj 
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputStrategyRuleInput(ctx context.Context, obj any) (strategyentity.StrategyRule, error) {
+func (ec *executionContext) unmarshalInputCreateStrategy(ctx context.Context, obj any) (strategydto.CreateStrategy, error) {
+	var it strategydto.CreateStrategy
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "startTime", "endTime", "rule", "maxTransactionPerDay", "maxProfit", "maxLoss"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "startTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startTime"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartTime = data
+		case "endTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endTime"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndTime = data
+		case "rule":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rule"))
+			data, err := ec.unmarshalNCreateStrategyRule2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategyRule(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Rule = data
+		case "maxTransactionPerDay":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxTransactionPerDay"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxTransactionPerDay = data
+		case "maxProfit":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxProfit"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxProfit = data
+		case "maxLoss":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLoss"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxLoss = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputCreateStrategyRule(ctx context.Context, obj any) (strategyentity.StrategyRule, error) {
 	var it strategyentity.StrategyRule
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -2150,7 +2354,7 @@ func (ec *executionContext) unmarshalInputStrategyRuleInput(ctx context.Context,
 		switch k {
 		case "symbol":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symbol"))
-			data, err := ec.unmarshalNSymbolRuleInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐSymbolRule(ctx, v)
+			data, err := ec.unmarshalNCreateSymbolRule2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐSymbolRule(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2178,14 +2382,14 @@ func (ec *executionContext) unmarshalInputStrategyRuleInput(ctx context.Context,
 			it.Loss = data
 		case "entryLogic":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entryLogic"))
-			data, err := ec.unmarshalOExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
+			data, err := ec.unmarshalOCreateExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.EntryLogic = data
 		case "exitLogic":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("exitLogic"))
-			data, err := ec.unmarshalOExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
+			data, err := ec.unmarshalOCreateExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2196,7 +2400,7 @@ func (ec *executionContext) unmarshalInputStrategyRuleInput(ctx context.Context,
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputSymbolRuleInput(ctx context.Context, obj any) (strategyentity.SymbolRule, error) {
+func (ec *executionContext) unmarshalInputCreateSymbolRule(ctx context.Context, obj any) (strategyentity.SymbolRule, error) {
 	var it strategyentity.SymbolRule
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
@@ -2241,6 +2445,390 @@ func (ec *executionContext) unmarshalInputSymbolRuleInput(ctx context.Context, o
 		case "lotSize":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lotSize"))
 			data, err := ec.unmarshalNInt2int(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LotSize = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateCondition(ctx context.Context, obj any) (strategyentity.UpdateCondition, error) {
+	var it strategyentity.UpdateCondition
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"left", "operator", "right"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "left":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("left"))
+			data, err := ec.unmarshalOUpdateOperand2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateOperand(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Left = data
+		case "operator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operator"))
+			data, err := ec.unmarshalOComparisonOperator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋoperatorsᚐComparisonOperator(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Operator = data
+		case "right":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("right"))
+			data, err := ec.unmarshalOUpdateOperand2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateOperand(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Right = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateExpression(ctx context.Context, obj any) (strategyentity.UpdateExpression, error) {
+	var it strategyentity.UpdateExpression
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"condition", "logical"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "condition":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("condition"))
+			data, err := ec.unmarshalOUpdateCondition2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateCondition(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Condition = data
+		case "logical":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logical"))
+			data, err := ec.unmarshalOUpdateLogicalGroup2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateLogicalGroup(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Logical = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateIndicatorField(ctx context.Context, obj any) (strategyentity.UpdateIndicatorField, error) {
+	var it strategyentity.UpdateIndicatorField
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "params"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOIndicator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋindicatorsᚐIndicator(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "params":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("params"))
+			data, err := ec.unmarshalOUpdateIndicatorParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐUpdateIndicatorParams(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Params = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateLogicalGroup(ctx context.Context, obj any) (strategyentity.UpdateLogicalGroup, error) {
+	var it strategyentity.UpdateLogicalGroup
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"operator", "expressions"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "operator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operator"))
+			data, err := ec.unmarshalOLogicalOperator2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋoperatorsᚐLogicalOperator(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Operator = data
+		case "expressions":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expressions"))
+			data, err := ec.unmarshalOUpdateExpression2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateExpression(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Expressions = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateOperand(ctx context.Context, obj any) (strategyentity.UpdateOperand, error) {
+	var it strategyentity.UpdateOperand
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"type", "indicatorField", "priceField", "constantField", "offset"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalOValueType2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐValueType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "indicatorField":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("indicatorField"))
+			data, err := ec.unmarshalOUpdateIndicatorField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateIndicatorField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IndicatorField = data
+		case "priceField":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priceField"))
+			data, err := ec.unmarshalOPriceField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐPriceField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriceField = data
+		case "constantField":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("constantField"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConstantField = data
+		case "offset":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Offset = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateStrategy(ctx context.Context, obj any) (strategydto.UpdateStrategy, error) {
+	var it strategydto.UpdateStrategy
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "startTime", "endTime", "rule", "maxTransactionPerDay", "maxProfit", "maxLoss"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "startTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("startTime"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.StartTime = data
+		case "endTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("endTime"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EndTime = data
+		case "rule":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rule"))
+			data, err := ec.unmarshalOUpdateStrategyRule2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateStrategyRule(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Rule = data
+		case "maxTransactionPerDay":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxTransactionPerDay"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxTransactionPerDay = data
+		case "maxProfit":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxProfit"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxProfit = data
+		case "maxLoss":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLoss"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.MaxLoss = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateStrategyRule(ctx context.Context, obj any) (strategyentity.UpdateStrategyRule, error) {
+	var it strategyentity.UpdateStrategyRule
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"symbol", "transaction", "profit", "loss", "entryLogic", "exitLogic"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "symbol":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("symbol"))
+			data, err := ec.unmarshalOUpdateSymbolRule2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateSymbolRule(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Symbol = data
+		case "transaction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("transaction"))
+			data, err := ec.unmarshalOTransaction2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋtransactionsᚐTransaction(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Transaction = data
+		case "profit":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("profit"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Profit = data
+		case "loss":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("loss"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Loss = data
+		case "entryLogic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entryLogic"))
+			data, err := ec.unmarshalOUpdateExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateExpression(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EntryLogic = data
+		case "exitLogic":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("exitLogic"))
+			data, err := ec.unmarshalOUpdateExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateExpression(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExitLogic = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUpdateSymbolRule(ctx context.Context, obj any) (strategyentity.UpdateSymbolRule, error) {
+	var it strategyentity.UpdateSymbolRule
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"lookUpSymbol", "instrument", "orderSymbol", "expiry", "lotSize"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "lookUpSymbol":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lookUpSymbol"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LookUpSymbol = data
+		case "instrument":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("instrument"))
+			data, err := ec.unmarshalOInstrument2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋpkgᚋenumsᚋinstrumentsᚐInstrument(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Instrument = data
+		case "orderSymbol":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("orderSymbol"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OrderSymbol = data
+		case "expiry":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiry"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Expiry = data
+		case "lotSize":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lotSize"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -2456,6 +3044,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createStrategy":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createStrategy(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateStrategy":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateStrategy(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -2787,6 +3382,46 @@ func (ec *executionContext) _SymbolRule(ctx context.Context, sel ast.SelectionSe
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNCreateExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, v any) (strategyentity.Expression, error) {
+	res, err := ec.unmarshalInputCreateExpression(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateExpression2ᚕgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpressionᚄ(ctx context.Context, v any) ([]strategyentity.Expression, error) {
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]strategyentity.Expression, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCreateExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNCreateOperand2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx context.Context, v any) (strategyentity.Operand, error) {
+	res, err := ec.unmarshalInputCreateOperand(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐCreateStrategy(ctx context.Context, v any) (strategydto.CreateStrategy, error) {
+	res, err := ec.unmarshalInputCreateStrategy(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateStrategyRule2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategyRule(ctx context.Context, v any) (strategyentity.StrategyRule, error) {
+	res, err := ec.unmarshalInputCreateStrategyRule(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateSymbolRule2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐSymbolRule(ctx context.Context, v any) (strategyentity.SymbolRule, error) {
+	res, err := ec.unmarshalInputCreateSymbolRule(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, sel ast.SelectionSet, v strategyentity.Expression) graphql.Marshaler {
 	return ec._Expression(ctx, sel, &v)
 }
@@ -2835,33 +3470,8 @@ func (ec *executionContext) marshalNExpression2ᚕgithubᚗcomᚋbharath0292ᚋq
 	return ret
 }
 
-func (ec *executionContext) unmarshalNExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, v any) (strategyentity.Expression, error) {
-	res, err := ec.unmarshalInputExpressionInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalNExpressionInput2ᚕgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpressionᚄ(ctx context.Context, v any) ([]strategyentity.Expression, error) {
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]strategyentity.Expression, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
 func (ec *executionContext) marshalNOperand2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx context.Context, sel ast.SelectionSet, v strategyentity.Operand) graphql.Marshaler {
 	return ec._Operand(ctx, sel, &v)
-}
-
-func (ec *executionContext) unmarshalNOperandInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐOperand(ctx context.Context, v any) (strategyentity.Operand, error) {
-	res, err := ec.unmarshalInputOperandInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategy(ctx context.Context, sel ast.SelectionSet, v strategyentity.Strategy) graphql.Marshaler {
@@ -2882,8 +3492,8 @@ func (ec *executionContext) marshalNSymbolRule2githubᚗcomᚋbharath0292ᚋquan
 	return ec._SymbolRule(ctx, sel, &v)
 }
 
-func (ec *executionContext) unmarshalNSymbolRuleInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐSymbolRule(ctx context.Context, v any) (strategyentity.SymbolRule, error) {
-	res, err := ec.unmarshalInputSymbolRuleInput(ctx, v)
+func (ec *executionContext) unmarshalNUpdateStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐUpdateStrategy(ctx context.Context, v any) (strategydto.UpdateStrategy, error) {
+	res, err := ec.unmarshalInputUpdateStrategy(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -2911,17 +3521,33 @@ func (ec *executionContext) marshalOCondition2ᚖgithubᚗcomᚋbharath0292ᚋqu
 	return ec._Condition(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOConditionInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐCondition(ctx context.Context, v any) (*strategyentity.Condition, error) {
+func (ec *executionContext) unmarshalOCreateCondition2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐCondition(ctx context.Context, v any) (*strategyentity.Condition, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalInputConditionInput(ctx, v)
+	res, err := ec.unmarshalInputCreateCondition(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOExpressionInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, v any) (strategyentity.Expression, error) {
-	res, err := ec.unmarshalInputExpressionInput(ctx, v)
+func (ec *executionContext) unmarshalOCreateExpression2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐExpression(ctx context.Context, v any) (strategyentity.Expression, error) {
+	res, err := ec.unmarshalInputCreateExpression(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCreateIndicatorField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐIndicatorField(ctx context.Context, v any) (*strategyentity.IndicatorField, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCreateIndicatorField(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOCreateLogicalGroup2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐLogicalGroup(ctx context.Context, v any) (*strategyentity.LogicalGroup, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputCreateLogicalGroup(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOIndicatorField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐIndicatorField(ctx context.Context, sel ast.SelectionSet, v *strategyentity.IndicatorField) graphql.Marshaler {
@@ -2931,27 +3557,11 @@ func (ec *executionContext) marshalOIndicatorField2ᚖgithubᚗcomᚋbharath0292
 	return ec._IndicatorField(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOIndicatorFieldInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐIndicatorField(ctx context.Context, v any) (*strategyentity.IndicatorField, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputIndicatorFieldInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) marshalOLogicalGroup2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐLogicalGroup(ctx context.Context, sel ast.SelectionSet, v *strategyentity.LogicalGroup) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._LogicalGroup(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOLogicalGroupInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐLogicalGroup(ctx context.Context, v any) (*strategyentity.LogicalGroup, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalInputLogicalGroupInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOPriceField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐPriceField(ctx context.Context, v any) (*strategyentity.PriceField, error) {
@@ -2973,9 +3583,97 @@ func (ec *executionContext) marshalOPriceField2ᚖgithubᚗcomᚋbharath0292ᚋq
 	return res
 }
 
-func (ec *executionContext) unmarshalOStrategyRuleInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategyRule(ctx context.Context, v any) (strategyentity.StrategyRule, error) {
-	res, err := ec.unmarshalInputStrategyRuleInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) unmarshalOUpdateCondition2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateCondition(ctx context.Context, v any) (*strategyentity.UpdateCondition, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateCondition(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOUpdateExpression2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateExpression(ctx context.Context, v any) ([]*strategyentity.UpdateExpression, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]*strategyentity.UpdateExpression, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOUpdateExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateExpression(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOUpdateExpression2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateExpression(ctx context.Context, v any) (*strategyentity.UpdateExpression, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateExpression(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOUpdateIndicatorField2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateIndicatorField(ctx context.Context, v any) (*strategyentity.UpdateIndicatorField, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateIndicatorField(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOUpdateLogicalGroup2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateLogicalGroup(ctx context.Context, v any) (*strategyentity.UpdateLogicalGroup, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateLogicalGroup(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOUpdateOperand2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateOperand(ctx context.Context, v any) (*strategyentity.UpdateOperand, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateOperand(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOUpdateStrategyRule2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateStrategyRule(ctx context.Context, v any) (*strategyentity.UpdateStrategyRule, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateStrategyRule(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOUpdateSymbolRule2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐUpdateSymbolRule(ctx context.Context, v any) (*strategyentity.UpdateSymbolRule, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputUpdateSymbolRule(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOValueType2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐValueType(ctx context.Context, v any) (*strategyentity.ValueType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	tmp, err := graphql.UnmarshalString(v)
+	res := strategyentity.ValueType(tmp)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOValueType2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐValueType(ctx context.Context, sel ast.SelectionSet, v *strategyentity.ValueType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(string(*v))
+	return res
 }
 
 // endregion ***************************** type.gotpl *****************************

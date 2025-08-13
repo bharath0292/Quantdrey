@@ -6,9 +6,14 @@ import (
 	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 )
 
+type UpdateExpression struct {
+	Condition *UpdateCondition    `bson:"condition,omitempty"`
+	Logical   *UpdateLogicalGroup `bson:"logical,omitempty"`
+}
+
 type Expression struct {
-	Condition *Condition    `bson:"condition,omitempty" json:"condition,omitempty"`
-	Logical   *LogicalGroup `bson:"logical,omitempty" json:"logical,omitempty"`
+	Condition *Condition    `bson:"condition,omitempty"`
+	Logical   *LogicalGroup `bson:"logical,omitempty"`
 }
 
 func (e *Expression) Evaluate(bar *tickentity.Bar) (bool, error) {

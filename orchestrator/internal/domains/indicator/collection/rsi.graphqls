@@ -1,0 +1,23 @@
+################### RSI ####################
+enum RsiOutput {
+    value
+}
+
+type RsiParams {
+    period: Int!
+    output: RsiOutput!
+}
+
+input CreateRsiParams {
+    period: Int!
+    output: RsiOutput!
+}
+
+input UpdateRsiParams {
+    period: Int
+    output: RsiOutput
+}
+
+type Rsi {
+    rsi: Float!
+}
