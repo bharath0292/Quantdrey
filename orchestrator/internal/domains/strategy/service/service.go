@@ -6,27 +6,27 @@ import (
 
 	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
 	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
+	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
-	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type strategyService struct {
-	tickService        tickservice.ITickService
+	strategyHub        strategyhub.IStrategyHub
 	strategyRepository strategyrepository.IStrategyRepository
 }
 
 type IStrategyService interface {
 	CreateStrategy(ctx context.Context, userId int, input *strategydto.CreateStrategy) (*strategyentity.Strategy, error)
 	UpdateStrategy(ctx context.Context, strategyId bson.ObjectID, input *strategydto.UpdateStrategy) (*strategyentity.Strategy, error)
-	RunStrategy(strategyId bson.ObjectID) error
+	RunStrategy(ctx context.Context, strategyId bson.ObjectID) (bool, error)
 }
 
 func NewStrategyService(
-	tickService tickservice.ITickService,
+	strategyHub strategyhub.IStrategyHub,
 	strategyRepository strategyrepository.IStrategyRepository,
 ) IStrategyService {
-	return &strategyService{tickService, strategyRepository}
+	return &strategyService{strategyHub, strategyRepository}
 }
 
 func (s *strategyService) CreateStrategy(ctx context.Context, userId int, input *strategydto.CreateStrategy) (*strategyentity.Strategy, error) {
@@ -42,6 +42,11 @@ func (s *strategyService) CreateStrategy(ctx context.Context, userId int, input 
 		MaxLoss:              input.MaxLoss,
 	}
 
+	err := newStrategy.Validate()
+	if err != nil {
+		return nil, err
+	}
+
 	return s.strategyRepository.CreateStrategy(ctx, &newStrategy)
 }
 
@@ -51,12 +56,12 @@ func (s *strategyService) UpdateStrategy(ctx context.Context, strategyId bson.Ob
 	return s.strategyRepository.UpdateStrategy(ctx, strategyId, updateBson)
 }
 
-func (s *strategyService) RunStrategy(strategyId bson.ObjectID) error {
-	// bar := s.tickService.GetLatestTick(strat.Rule.Symbol.LookUpSymbol)
-	// _, err := strat.Rule.EntryLogic.Evaluate(bar)
-	// if err != nil {
-	// 	log.Error().Err(err).Msg("Error evaluating strategy entry")
-	// 	return err
-	// }
-	return nil
+func (s *strategyService) RunStrategy(ctx context.Context, strategyId bson.ObjectID) (bool, error) {
+	strategy, err := s.strategyRepository.GetStrategy(ctx, strategyId)
+	if err != nil {
+		return false, err
+	}
+	s.strategyHub.Add(strategy)
+
+	return true, nil
 }

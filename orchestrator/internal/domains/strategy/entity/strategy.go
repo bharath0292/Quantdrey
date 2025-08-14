@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/bharath0292/quantdrey/graph/scalars"
+	strategyutils "github.com/bharath0292/quantdrey/internal/domains/strategy/utils"
 )
 
 type Strategy struct {
@@ -18,4 +19,17 @@ type Strategy struct {
 	MaxTransactionPerDay *int           `bson:"maxTransactionPerDay,omitempty"`
 	MaxProfit            *float64       `bson:"maxProfit,omitempty"`
 	MaxLoss              *float64       `bson:"maxLoss,omitempty"`
+}
+
+func (s *Strategy) Validate() error {
+	_, err := strategyutils.ParseTime(s.StartTime)
+	if err != nil {
+		return err
+	}
+	_, err = strategyutils.ParseTime(s.EndTime)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -16,12 +16,23 @@ type strategyRepository struct {
 }
 
 type IStrategyRepository interface {
+	GetStrategy(ctx context.Context, strategyID bson.ObjectID) (*strategyentity.Strategy, error)
 	CreateStrategy(ctx context.Context, newStrategy *strategyentity.Strategy) (*strategyentity.Strategy, error)
 	UpdateStrategy(ctx context.Context, strategyID bson.ObjectID, updateMap bson.M) (*strategyentity.Strategy, error)
 }
 
 func NewStrategyService(mongo *mongoFactory.MongoClient) IStrategyRepository {
 	return &strategyRepository{mongo}
+}
+
+func (s *strategyRepository) GetStrategy(ctx context.Context, strategyID bson.ObjectID) (*strategyentity.Strategy, error) {
+	var strategy strategyentity.Strategy
+	err := s.mongo.ReadDocument(ctx, COLLECTION_NAME, strategyID, &strategy)
+	if err != nil {
+		return nil, err
+	}
+
+	return &strategy, nil
 }
 
 func (s *strategyRepository) CreateStrategy(ctx context.Context, newStrategy *strategyentity.Strategy) (*strategyentity.Strategy, error) {
@@ -49,5 +60,4 @@ func (s *strategyRepository) UpdateStrategy(ctx context.Context, strategyID bson
 	}
 
 	return &updatedStrategy, nil
-
 }

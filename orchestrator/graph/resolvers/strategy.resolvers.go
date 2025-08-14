@@ -30,6 +30,10 @@ func (r *mutationResolver) UpdateStrategy(ctx context.Context, strategyID bson.O
 	return updatedStrategy, nil
 }
 
+func (r *mutationResolver) RunStrategy(ctx context.Context, strategyID bson.ObjectID) (bool, error) {
+	return r.strategyService.RunStrategy(ctx, strategyID)
+}
+
 func (r *queryResolver) ListAllStrategy(ctx context.Context, userID int) (*strategyentity.Strategy, error) {
 	panic(fmt.Errorf("not implemented: ListAllStrategy - listAllStrategy"))
 }

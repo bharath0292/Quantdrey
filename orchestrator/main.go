@@ -8,13 +8,17 @@ import (
 
 	// Factories
 	factory "github.com/bharath0292/quantdrey/infrastructure"
+	inmemoryFactory "github.com/bharath0292/quantdrey/infrastructure/inMemory"
 	mongoFactory "github.com/bharath0292/quantdrey/infrastructure/mongo"
 	natFactory "github.com/bharath0292/quantdrey/infrastructure/nats"
 	postgresFactory "github.com/bharath0292/quantdrey/infrastructure/postgres"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 
+	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
+	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
 	strategyservice "github.com/bharath0292/quantdrey/internal/domains/strategy/service"
+	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 	tickhub "github.com/bharath0292/quantdrey/internal/domains/tick/hub"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
 
@@ -126,19 +130,28 @@ func main() {
 		MongoConfig:    mongoConfig,
 	})
 	if err != nil {
-		log.Fatal().Err(err).Msg("Factory initialization failed")
+		log.Fatal().Err(err).Msg("factory initialization failed")
 	}
 
-	/* ######### HUBS ######### */
-	tickHub := tickhub.NewTickHub(factories.RedisClient, factories.NatsClient)
+	tickInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, tickentity.Bar](ctx)
+	if err != nil {
+		log.Fatal().Err(err).Msg("tickInMemoryClient initialization failed")
+	}
+	strategyInMemoryClient, err := inmemoryFactory.NewInMemoryClient[int, []*strategyentity.Strategy](ctx)
+	if err != nil {
+		log.Fatal().Err(err).Msg("strategyInMemoryClient initialization failed")
+	}
+
+	/* ######### Tick Domain ######### */
+	tickHub := tickhub.NewTickHub(tickInMemoryClient, factories.RedisClient, factories.NatsClient)
+	tickService := tickservice.NewTickService(factories.NatsClient, tickHub)
+
 	tickHub.SubscribeTicks()
 
-	/* ######### REPOSITORIES ######### */
+	/* ######### Strategy Domain ######### */
+	strategyHub := strategyhub.NewStrategyHub(strategyInMemoryClient, tickService)
 	strategyRepository := strategyrepository.NewStrategyService(factories.MongoClient)
-
-	/* ######### SERVICES ######### */
-	tickService := tickservice.NewTickService(factories.NatsClient, tickHub)
-	strategyService := strategyservice.NewStrategyService(tickService, strategyRepository)
+	strategyService := strategyservice.NewStrategyService(strategyHub, strategyRepository)
 
 	/* ######### HANDLERS ######### */
 

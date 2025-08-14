@@ -82,6 +82,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateStrategy func(childComplexity int, userID int, input strategydto.CreateStrategy) int
+		RunStrategy    func(childComplexity int, strategyID bson.ObjectID) int
 		UpdateStrategy func(childComplexity int, strategyID bson.ObjectID, input strategydto.UpdateStrategy) int
 	}
 
@@ -285,6 +286,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateStrategy(childComplexity, args["userId"].(int), args["input"].(strategydto.CreateStrategy)), true
+
+	case "Mutation.runStrategy":
+		if e.complexity.Mutation.RunStrategy == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_runStrategy_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RunStrategy(childComplexity, args["strategyId"].(bson.ObjectID)), true
 
 	case "Mutation.updateStrategy":
 		if e.complexity.Mutation.UpdateStrategy == nil {
@@ -795,6 +808,7 @@ input CreateStrategy {
     maxProfit: Float
     maxLoss: Float
 }
+
 # -------------- UPDATE -------------------
 input UpdateIndicatorField {
     name: Indicator
@@ -853,6 +867,7 @@ input UpdateStrategy {
 }
 
 type Mutation {
+    runStrategy(strategyId: BsonId!): Boolean!
     createStrategy(userId: ID!, input: CreateStrategy!): Strategy!
     updateStrategy(strategyId: BsonId!, input: UpdateStrategy!): Strategy!
 }

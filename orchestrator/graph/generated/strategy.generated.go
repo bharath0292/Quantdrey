@@ -27,6 +27,7 @@ import (
 // region    ************************** generated!.gotpl **************************
 
 type MutationResolver interface {
+	RunStrategy(ctx context.Context, strategyID bson.ObjectID) (bool, error)
 	CreateStrategy(ctx context.Context, userID int, input strategydto.CreateStrategy) (*strategyentity.Strategy, error)
 	UpdateStrategy(ctx context.Context, strategyID bson.ObjectID, input strategydto.UpdateStrategy) (*strategyentity.Strategy, error)
 }
@@ -76,6 +77,29 @@ func (ec *executionContext) field_Mutation_createStrategy_argsInput(
 	}
 
 	var zeroVal strategydto.CreateStrategy
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_runStrategy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_runStrategy_argsStrategyID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["strategyId"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_runStrategy_argsStrategyID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (bson.ObjectID, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("strategyId"))
+	if tmp, ok := rawArgs["strategyId"]; ok {
+		return ec.unmarshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, tmp)
+	}
+
+	var zeroVal bson.ObjectID
 	return zeroVal, nil
 }
 
@@ -610,6 +634,61 @@ func (ec *executionContext) fieldContext_LogicalGroup_expressions(_ context.Cont
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Expression", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_runStrategy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_runStrategy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RunStrategy(rctx, fc.Args["strategyId"].(bson.ObjectID))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_runStrategy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_runStrategy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -3041,6 +3120,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
+		case "runStrategy":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_runStrategy(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "createStrategy":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createStrategy(ctx, field)

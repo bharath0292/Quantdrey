@@ -6,20 +6,18 @@ import (
 
 	"github.com/goccy/go-json"
 
+	inMemoryFactory "github.com/bharath0292/quantdrey/infrastructure/inMemory"
 	natsfactory "github.com/bharath0292/quantdrey/infrastructure/nats"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 	tickdto "github.com/bharath0292/quantdrey/internal/domains/tick/dto"
 	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 
 	"github.com/nats-io/nats.go"
-	"github.com/puzpuzpuz/xsync/v4"
 	"github.com/rs/zerolog/log"
 )
 
 type tickHub struct {
-	inMemoryClient struct {
-		client *xsync.Map[string, tickentity.Bar]
-	}
+	store       *inMemoryFactory.InMemoryClient[string, tickentity.Bar]
 	redisClient *redisFactory.RedisClient
 	natsClient  *natsfactory.NatsClient
 }
@@ -32,13 +30,13 @@ type ITickHub interface {
 	UpdateTick(tickMessage *nats.Msg)
 }
 
-func NewTickHub(redisClient *redisFactory.RedisClient, natsClient *natsfactory.NatsClient) ITickHub {
-	store := xsync.NewMap[string, tickentity.Bar]()
-
+func NewTickHub(
+	inMemoryClient *inMemoryFactory.InMemoryClient[string, tickentity.Bar],
+	redisClient *redisFactory.RedisClient,
+	natsClient *natsfactory.NatsClient,
+) ITickHub {
 	return &tickHub{
-		struct {
-			client *xsync.Map[string, tickentity.Bar]
-		}{store},
+		inMemoryClient,
 		redisClient,
 		natsClient,
 	}
@@ -194,5 +192,5 @@ func (th *tickHub) UpdateTick(tickMessage *nats.Msg) {
 		return
 	}
 
-	th.inMemoryClient.client.Store(bar.Symbol, *bar)
+	th.store.Store(bar.Symbol, *bar)
 }
