@@ -2,6 +2,7 @@ package mongoFactory
 
 import (
 	"context"
+	"errors"
 	"strings"
 	"time"
 
@@ -60,6 +61,24 @@ func (c *MongoClient) Close(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (c *MongoClient) ReadDocument(ctx context.Context, collection string, id bson.ObjectID, out any) error {
+	if out == nil {
+		return errors.New("output object not available")
+	}
+
+	coll := c.db.Collection(collection)
+	err := coll.FindOne(ctx, bson.M{"_id": id}).Decode(out)
+	if err != nil {
+		log.Error().Err(err).
+			Str("collection", collection).
+			Str("insertedId", id.Hex()).
+			Msg("Failed to fetch inserted document")
+		return mongo.ErrNilDocument
+	}
+
 	return nil
 }
 
