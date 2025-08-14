@@ -2,7 +2,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 
 	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
 	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
@@ -28,12 +27,4 @@ func (r *mutationResolver) UpdateStrategy(ctx context.Context, strategyID bson.O
 	}
 
 	return updatedStrategy, nil
-}
-
-func (r *mutationResolver) RunStrategy(ctx context.Context, strategyID bson.ObjectID) (bool, error) {
-	return r.strategyService.RunStrategy(ctx, strategyID)
-}
-
-func (r *queryResolver) ListAllStrategy(ctx context.Context, userID int) (*strategyentity.Strategy, error) {
-	panic(fmt.Errorf("not implemented: ListAllStrategy - listAllStrategy"))
 }

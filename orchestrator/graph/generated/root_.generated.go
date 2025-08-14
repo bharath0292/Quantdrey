@@ -82,7 +82,6 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateStrategy func(childComplexity int, userID int, input strategydto.CreateStrategy) int
-		RunStrategy    func(childComplexity int, strategyID bson.ObjectID) int
 		UpdateStrategy func(childComplexity int, strategyID bson.ObjectID, input strategydto.UpdateStrategy) int
 	}
 
@@ -95,7 +94,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		ListAllStrategy func(childComplexity int, userID int) int
+		RunStrategy func(childComplexity int, strategyID bson.ObjectID) int
 	}
 
 	Rsi struct {
@@ -287,18 +286,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateStrategy(childComplexity, args["userId"].(int), args["input"].(strategydto.CreateStrategy)), true
 
-	case "Mutation.runStrategy":
-		if e.complexity.Mutation.RunStrategy == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_runStrategy_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.RunStrategy(childComplexity, args["strategyId"].(bson.ObjectID)), true
-
 	case "Mutation.updateStrategy":
 		if e.complexity.Mutation.UpdateStrategy == nil {
 			break
@@ -346,17 +333,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Operand.Type(childComplexity), true
 
-	case "Query.listAllStrategy":
-		if e.complexity.Query.ListAllStrategy == nil {
+	case "Query.runStrategy":
+		if e.complexity.Query.RunStrategy == nil {
 			break
 		}
 
-		args, err := ec.field_Query_listAllStrategy_args(ctx, rawArgs)
+		args, err := ec.field_Query_runStrategy_args(ctx, rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.ListAllStrategy(childComplexity, args["userId"].(int)), true
+		return e.complexity.Query.RunStrategy(childComplexity, args["strategyId"].(bson.ObjectID)), true
 
 	case "Rsi.rsi":
 		if e.complexity.Rsi.Rsi == nil {
@@ -865,12 +852,6 @@ input UpdateStrategy {
     maxProfit: Float
     maxLoss: Float
 }
-
-type Mutation {
-    runStrategy(strategyId: BsonId!): Boolean!
-    createStrategy(userId: ID!, input: CreateStrategy!): Strategy!
-    updateStrategy(strategyId: BsonId!, input: UpdateStrategy!): Strategy!
-}
 `, BuiltIn: false},
 	{Name: "../../internal/domains/strategy/entity/strategy.graphqls", Input: `enum ValueType {
     price_field
@@ -944,12 +925,19 @@ type Strategy {
     maxProfit: Float
     maxLoss: Float
 }
+`, BuiltIn: false},
+	{Name: "../schema/resolver.graphqls", Input: `type Query {
+    # ------------[ STRATEGY RUNNER DOMAIN ]------------
+    runStrategy(strategyId: BsonId!): Boolean!
+}
 
-type Query {
-    listAllStrategy(userId: ID!): Strategy!
+type Mutation {
+    # ------------[ STRATEGY DOMAIN ]------------
+    createStrategy(userId: ID!, input: CreateStrategy!): Strategy!
+    updateStrategy(strategyId: BsonId!, input: UpdateStrategy!): Strategy!
 }
 `, BuiltIn: false},
-	{Name: "../scalars/scalars.graphqls", Input: `scalar BsonId
+	{Name: "../schema/scalars/scalars.graphqls", Input: `scalar BsonId
 scalar Time
 `, BuiltIn: false},
 }

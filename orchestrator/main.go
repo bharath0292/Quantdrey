@@ -15,9 +15,10 @@ import (
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 
 	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
-	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
 	strategyservice "github.com/bharath0292/quantdrey/internal/domains/strategy/service"
+	strategyrunnerhub "github.com/bharath0292/quantdrey/internal/domains/strategyrunner/hub"
+	strategyrunnerservice "github.com/bharath0292/quantdrey/internal/domains/strategyrunner/service"
 	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 	tickhub "github.com/bharath0292/quantdrey/internal/domains/tick/hub"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
@@ -148,12 +149,13 @@ func main() {
 
 	tickHub.SubscribeTicks()
 
-	/* ######### Strategy Domain ######### */
-	strategyHub := strategyhub.NewStrategyHub(strategyInMemoryClient, tickService)
-	strategyRepository := strategyrepository.NewStrategyService(factories.MongoClient)
-	strategyService := strategyservice.NewStrategyService(strategyHub, strategyRepository)
+	/* ######### Strategy Runner Domain ######### */
+	strategyRunnerHub := strategyrunnerhub.NewStrategyRunnerHub(strategyInMemoryClient, tickService)
+	strategyRunnerService := strategyrunnerservice.NewStrategyRunnerHub(tickService, strategyRunnerHub)
 
-	/* ######### HANDLERS ######### */
+	/* ######### Strategy Domain ######### */
+	strategyRepository := strategyrepository.NewStrategyService(factories.MongoClient)
+	strategyService := strategyservice.NewStrategyService(strategyRepository, strategyRunnerService)
 
 	/* ######### Engines ######### */
 	restEngine := engine.NewRestEngine()

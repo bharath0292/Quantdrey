@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/bharath0292/quantdrey/graph/scalars"
+	"github.com/bharath0292/quantdrey/graph/schema/scalars"
 	"github.com/vektah/gqlparser/v2/ast"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )

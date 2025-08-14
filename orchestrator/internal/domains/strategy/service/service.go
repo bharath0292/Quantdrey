@@ -6,14 +6,14 @@ import (
 
 	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
 	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
-	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
+	strategyrunnerservice "github.com/bharath0292/quantdrey/internal/domains/strategyrunner/service"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type strategyService struct {
-	strategyHub        strategyhub.IStrategyHub
-	strategyRepository strategyrepository.IStrategyRepository
+	strategyRepository    strategyrepository.IStrategyRepository
+	strategyRunnerService strategyrunnerservice.IStrategyRunnerService
 }
 
 type IStrategyService interface {
@@ -23,10 +23,10 @@ type IStrategyService interface {
 }
 
 func NewStrategyService(
-	strategyHub strategyhub.IStrategyHub,
 	strategyRepository strategyrepository.IStrategyRepository,
+	strategyRunnerService strategyrunnerservice.IStrategyRunnerService,
 ) IStrategyService {
-	return &strategyService{strategyHub, strategyRepository}
+	return &strategyService{strategyRepository, strategyRunnerService}
 }
 
 func (s *strategyService) CreateStrategy(ctx context.Context, userId int, input *strategydto.CreateStrategy) (*strategyentity.Strategy, error) {
@@ -61,7 +61,7 @@ func (s *strategyService) RunStrategy(ctx context.Context, strategyId bson.Objec
 	if err != nil {
 		return false, err
 	}
-	s.strategyHub.Add(strategy)
+	s.strategyRunnerService.Run(strategy)
 
 	return true, nil
 }

@@ -3,7 +3,7 @@ package strategyentity
 import (
 	"time"
 
-	"github.com/bharath0292/quantdrey/graph/scalars"
+	"github.com/bharath0292/quantdrey/graph/schema/scalars"
 	strategyutils "github.com/bharath0292/quantdrey/internal/domains/strategy/utils"
 )
 
@@ -22,11 +22,11 @@ type Strategy struct {
 }
 
 func (s *Strategy) Validate() error {
-	_, err := strategyutils.ParseTime(s.StartTime)
+	err := strategyutils.ValidateStrategyTime(s.StartTime)
 	if err != nil {
 		return err
 	}
-	_, err = strategyutils.ParseTime(s.EndTime)
+	err = strategyutils.ValidateStrategyTime(s.EndTime)
 	if err != nil {
 		return err
 	}

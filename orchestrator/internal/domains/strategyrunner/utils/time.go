@@ -1,7 +1,6 @@
-package strategyutils
+package strategyrunnerutils
 
 import (
-	"errors"
 	"strconv"
 	"strings"
 	"time"
@@ -18,25 +17,16 @@ func SleepUntil(startTime time.Time) {
 	}
 }
 
-func ParseTime(timeStr string) (*time.Time, error) {
+func ParseTime(timeStr string) *time.Time {
 	timePart := strings.Split(timeStr, ":")
 
-	hour, err := strconv.Atoi(timePart[0])
-	if err != nil {
-		return nil, errors.New("error parsing hour")
-	}
-
-	minute, err := strconv.Atoi(timePart[1])
-	if err != nil {
-		return nil, errors.New("error parsing minute")
-	}
-	second, err := strconv.Atoi(timePart[2])
-	if err != nil {
-		return nil, errors.New("error parsing second")
-	}
+	// No error handling because we validated while creating
+	hour, _ := strconv.Atoi(timePart[0])
+	minute, _ := strconv.Atoi(timePart[1])
+	second, _ := strconv.Atoi(timePart[2])
 
 	t := time.Now()
 	created := time.Date(t.Year(), t.Month(), t.Day(), hour, minute, second, 0, t.Location())
 
-	return &created, nil
+	return &created
 }

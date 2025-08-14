@@ -70,7 +70,3 @@ type Strategy {
     maxProfit: Float
     maxLoss: Float
 }
-
-type Query {
-    listAllStrategy(userId: ID!): Strategy!
-}
