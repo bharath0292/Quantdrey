@@ -23,3 +23,7 @@ func (m *InMemoryClient[K, V]) Load(key K) (value V, ok bool) {
 func (m *InMemoryClient[K, V]) Store(key K, value V) {
 	m.client.Store(key, value)
 }
+
+func (m *InMemoryClient[K, V]) Delete(key K) {
+	m.client.Delete(key)
+}

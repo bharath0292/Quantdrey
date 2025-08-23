@@ -21,7 +21,7 @@ type IStrategyRepository interface {
 	UpdateStrategy(ctx context.Context, strategyID bson.ObjectID, updateMap bson.M) (*strategyentity.Strategy, error)
 }
 
-func NewStrategyService(mongo *mongoFactory.MongoClient) IStrategyRepository {
+func NewStrategyRepository(mongo *mongoFactory.MongoClient) IStrategyRepository {
 	return &strategyRepository{mongo}
 }
 

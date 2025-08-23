@@ -14,11 +14,10 @@ import (
 	postgresFactory "github.com/bharath0292/quantdrey/infrastructure/postgres"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 
-	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
+	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
+	strategyrunner "github.com/bharath0292/quantdrey/internal/domains/strategy/runner"
 	strategyservice "github.com/bharath0292/quantdrey/internal/domains/strategy/service"
-	strategyrunnerhub "github.com/bharath0292/quantdrey/internal/domains/strategyrunner/hub"
-	strategyrunnerservice "github.com/bharath0292/quantdrey/internal/domains/strategyrunner/service"
 	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 	tickhub "github.com/bharath0292/quantdrey/internal/domains/tick/hub"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
@@ -134,28 +133,26 @@ func main() {
 		log.Fatal().Err(err).Msg("factory initialization failed")
 	}
 
+	/* ######### Tick Domain ######### */
 	tickInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, tickentity.Bar](ctx)
 	if err != nil {
 		log.Fatal().Err(err).Msg("tickInMemoryClient initialization failed")
 	}
-	strategyInMemoryClient, err := inmemoryFactory.NewInMemoryClient[int, []*strategyentity.Strategy](ctx)
-	if err != nil {
-		log.Fatal().Err(err).Msg("strategyInMemoryClient initialization failed")
-	}
 
-	/* ######### Tick Domain ######### */
 	tickHub := tickhub.NewTickHub(tickInMemoryClient, factories.RedisClient, factories.NatsClient)
 	tickService := tickservice.NewTickService(factories.NatsClient, tickHub)
 
 	tickHub.SubscribeTicks()
 
-	/* ######### Strategy Runner Domain ######### */
-	strategyRunnerHub := strategyrunnerhub.NewStrategyRunnerHub(strategyInMemoryClient, tickService)
-	strategyRunnerService := strategyrunnerservice.NewStrategyRunnerHub(tickService, strategyRunnerHub)
-
 	/* ######### Strategy Domain ######### */
-	strategyRepository := strategyrepository.NewStrategyService(factories.MongoClient)
-	strategyService := strategyservice.NewStrategyService(strategyRepository, strategyRunnerService)
+	strategyInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, strategyrunner.IStrategyRunner](ctx)
+	if err != nil {
+		log.Fatal().Err(err).Msg("strategyInMemoryClient initialization failed")
+	}
+
+	strategyHub := strategyhub.NewStrategyHub(strategyInMemoryClient)
+	strategyRepository := strategyrepository.NewStrategyRepository(factories.MongoClient)
+	strategyService := strategyservice.NewStrategyService(strategyRepository, tickService, strategyHub)
 
 	/* ######### Engines ######### */
 	restEngine := engine.NewRestEngine()

@@ -18,7 +18,7 @@ type tickService struct {
 }
 
 type ITickService interface {
-	SendRequest(requestMessage *nats.Msg) (bool, error)
+	Subscribe(symbol string, timeframe uint8, indicators *[]string) (bool, error)
 	GetTick(time *time.Time, symbol string) *tickentity.Bar
 	GetLatestTick(symbol string) *tickentity.Bar
 	UpdateTick(tickMessage *nats.Msg)
@@ -28,9 +28,8 @@ func NewTickService(nc *natFactory.NatsClient, tickHub tickhub.ITickHub) ITickSe
 	return &tickService{nc, tickHub}
 }
 
-func (th *tickService) SendRequest(requestMessage *nats.Msg) (bool, error) {
-	_, err := th.natsClient.SendRequest(requestMessage)
-	if err != nil {
+func (th *tickService) Subscribe(symbol string, timeframe uint8, indicators *[]string) (bool, error) {
+	if err := th.tickHub.Register(symbol, timeframe, indicators); err != nil {
 		return false, err
 	}
 	return true, nil

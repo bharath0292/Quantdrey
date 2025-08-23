@@ -1,4 +1,4 @@
-package strategyrunnerutils
+package strategyutils
 
 import (
 	"strconv"
