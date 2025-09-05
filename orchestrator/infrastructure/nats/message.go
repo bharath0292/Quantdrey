@@ -37,13 +37,13 @@ func NewNatsClient(config NatsConfig) (*NatsClient, error) {
 	// Validate connectivity
 	nc, err := connPool.Get()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get NATS connection from pool: %w", err)
+		return nil, fmt.Errorf("connection failed: %w", err)
 	}
 	defer connPool.Put(nc)
 
 	// Perform a test ping
 	if err := nc.Publish("PING", []byte("TEST PING FROM CLIENT")); err != nil {
-		return nil, fmt.Errorf("failed to publish test ping: %w", err)
+		return nil, fmt.Errorf("ping failed: %w", err)
 	}
 
 	return &NatsClient{

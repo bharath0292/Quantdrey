@@ -3,7 +3,7 @@ package mongoFactory
 import (
 	"context"
 	"errors"
-	"strings"
+	"fmt"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -14,10 +14,11 @@ import (
 
 type MongoConfig struct {
 	Uri         string
-	Username    *string
-	Password    *string
-	MaxPoolSize *uint64
-	MinPoolSize *uint64
+	Username    string
+	Password    string
+	Database    string
+	MaxPoolSize uint64
+	MinPoolSize uint64
 }
 
 type MongoClient struct {
@@ -25,41 +26,39 @@ type MongoClient struct {
 	db     *mongo.Database
 }
 
-func NewMongoClient(ctx context.Context, config MongoConfig) (*MongoClient, error) {
-	timeout := time.Duration(3) * time.Second
+func NewMongoClient(config MongoConfig) (*MongoClient, error) {
+	timeout := time.Duration(30) * time.Second
 
-	var sb strings.Builder
-	sb.WriteString("mongodb://")
-	sb.WriteString(*config.Username)
-	sb.WriteString(":")
-	sb.WriteString(*config.Password)
-	sb.WriteString("@")
-	sb.WriteString(config.Uri)
-	sb.WriteString("/")
+	mongoUri := fmt.Sprintf("mongodb://%s:%s@%s/", config.Username, config.Password, config.Uri)
 
-	fullMongoUri := sb.String()
-
-	clientOptions := options.Client().ApplyURI(fullMongoUri)
-	clientOptions.MaxPoolSize = config.MaxPoolSize
-	clientOptions.MinPoolSize = config.MinPoolSize
+	clientOptions := options.Client().ApplyURI(mongoUri)
 	clientOptions.Timeout = &timeout
+	clientOptions.MaxPoolSize = &config.MaxPoolSize
+	clientOptions.MinPoolSize = &config.MinPoolSize
 
 	client, err := mongo.Connect(clientOptions)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("connection failed: %w", err)
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ping failed: %w", err)
 	}
-	return &MongoClient{client, client.Database("quantdrey")}, nil
+
+	return &MongoClient{client, client.Database(config.Database)}, nil
 }
 
-func (c *MongoClient) Close(ctx context.Context) error {
+func (c *MongoClient) Close() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	err := c.client.Disconnect(ctx)
 	if err != nil {
-		return err
+		return fmt.Errorf("close connection failed: %w", err)
 	}
 	return nil
 }

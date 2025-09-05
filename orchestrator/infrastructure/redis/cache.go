@@ -14,15 +14,18 @@ type RedisClient struct {
 	client rueidis.Client
 }
 
-func NewRedisClient(ctx context.Context, config RedisConfig) (*RedisClient, error) {
+func NewRedisClient(config RedisConfig) (*RedisClient, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
 	client, err := rueidis.NewClient(rueidis.ClientOption(config))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("connection failed: %w", err)
 	}
 
 	// PING to validate connection
 	if err := client.Do(ctx, client.B().Ping().Build()).Error(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ping failed: %w", err)
 	}
 
 	return &RedisClient{client: client}, nil

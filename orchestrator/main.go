@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"os"
 	"path/filepath"
 	"time"
@@ -115,15 +114,17 @@ func main() {
 	mongoUsername := os.Getenv("MONGO_USERNAME")
 	mongoPassword := os.Getenv("MONGO_PASSWORD")
 	mongoConfig := mongoFactory.MongoConfig{
-		Uri:      mongoUri,
-		Username: &mongoUsername,
-		Password: &mongoPassword,
+		Uri:         mongoUri,
+		Username:    mongoUsername,
+		Password:    mongoPassword,
+		Database:    "quantdrey",
+		MaxPoolSize: 10,
+		MinPoolSize: 5,
 	}
 
 	postgresConfig := postgresFactory.PostgresConfig{}
 
-	ctx := context.Background()
-	factories, err := factory.NewFactory(ctx, factory.FactoryConfig{
+	factories, err := factory.NewFactory(factory.FactoryConfig{
 		RedisConfig:    redisOptions,
 		NatsConfig:     natsOptions,
 		PostgresConfig: postgresConfig,
@@ -134,7 +135,7 @@ func main() {
 	}
 
 	/* ######### Tick Domain ######### */
-	tickInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, tickentity.Bar](ctx)
+	tickInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, tickentity.Bar]()
 	if err != nil {
 		log.Fatal().Err(err).Msg("tickInMemoryClient initialization failed")
 	}
@@ -145,7 +146,7 @@ func main() {
 	tickHub.SubscribeTicks()
 
 	/* ######### Strategy Domain ######### */
-	strategyInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, strategyrunner.IStrategyRunner](ctx)
+	strategyInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, strategyrunner.IStrategyRunner]()
 	if err != nil {
 		log.Fatal().Err(err).Msg("strategyInMemoryClient initialization failed")
 	}

@@ -1,8 +1,6 @@
 package inMemoryFactory
 
 import (
-	"context"
-
 	"github.com/puzpuzpuz/xsync/v4"
 )
 
@@ -10,7 +8,7 @@ type InMemoryClient[K comparable, V any] struct {
 	client *xsync.Map[K, V]
 }
 
-func NewInMemoryClient[K comparable, V any](ctx context.Context) (*InMemoryClient[K, V], error) {
+func NewInMemoryClient[K comparable, V any]() (*InMemoryClient[K, V], error) {
 	client := xsync.NewMap[K, V]()
 
 	return &InMemoryClient[K, V]{client}, nil

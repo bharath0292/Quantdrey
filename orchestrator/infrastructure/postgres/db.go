@@ -1,12 +1,10 @@
 package postgresFactory
 
-import "context"
-
 type PostgresConfig struct{}
 
 type PostgresClient struct{}
 
-func NewPostgresClient(ctx context.Context, config PostgresConfig) (*PostgresClient, error) {
+func NewPostgresClient(config PostgresConfig) (*PostgresClient, error) {
 	return &PostgresClient{}, nil
 }
 
