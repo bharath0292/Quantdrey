@@ -123,7 +123,7 @@ type ComplexityRoot struct {
 		ExitLogic   func(childComplexity int) int
 		Loss        func(childComplexity int) int
 		Profit      func(childComplexity int) int
-		Symbol      func(childComplexity int) int
+		Symbols     func(childComplexity int) int
 		Transaction func(childComplexity int) int
 	}
 
@@ -457,12 +457,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.StrategyRule.Profit(childComplexity), true
 
-	case "StrategyRule.symbol":
-		if e.complexity.StrategyRule.Symbol == nil {
+	case "StrategyRule.symbols":
+		if e.complexity.StrategyRule.Symbols == nil {
 			break
 		}
 
-		return e.complexity.StrategyRule.Symbol(childComplexity), true
+		return e.complexity.StrategyRule.Symbols(childComplexity), true
 
 	case "StrategyRule.transaction":
 		if e.complexity.StrategyRule.Transaction == nil {
@@ -778,7 +778,7 @@ input CreateSymbolRule {
 }
 
 input CreateStrategyRule {
-    symbol: CreateSymbolRule!
+    symbols: [CreateSymbolRule!]
     transaction: Transaction!
     profit: Float
     loss: Float
@@ -835,7 +835,7 @@ input UpdateSymbolRule {
 }
 
 input UpdateStrategyRule {
-    symbol: UpdateSymbolRule
+    symbols: [UpdateSymbolRule]
     transaction: Transaction
     profit: Float
     loss: Float
@@ -906,7 +906,7 @@ type SymbolRule {
 }
 
 type StrategyRule {
-    symbol: SymbolRule!
+    symbols: [SymbolRule!]
     transaction: Transaction!
     profit: Float
     loss: Float

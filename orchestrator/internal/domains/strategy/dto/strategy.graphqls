@@ -37,7 +37,7 @@ input CreateSymbolRule {
 }
 
 input CreateStrategyRule {
-    symbol: CreateSymbolRule!
+    symbols: [CreateSymbolRule!]
     transaction: Transaction!
     profit: Float
     loss: Float
@@ -94,7 +94,7 @@ input UpdateSymbolRule {
 }
 
 input UpdateStrategyRule {
-    symbol: UpdateSymbolRule
+    symbols: [UpdateSymbolRule]
     transaction: Transaction
     profit: Float
     loss: Float

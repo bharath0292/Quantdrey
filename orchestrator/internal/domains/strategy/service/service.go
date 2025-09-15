@@ -3,7 +3,6 @@ package strategyservice
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
@@ -13,6 +12,7 @@ import (
 	strategyrunner "github.com/bharath0292/quantdrey/internal/domains/strategy/runner"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
 
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
@@ -78,11 +78,11 @@ func (s *strategyService) Start(ctx context.Context, strategyId bson.ObjectID) (
 		return false, err
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
+	bgCtx, cancel := context.WithCancel(context.Background())
 	runner := strategyrunner.NewStrategyRunner(s.tickService, strategy, cancel)
 
 	s.hub.Register(strategy.Id.Hex(), runner)
-	go runner.Start(ctx, strategy)
+	go runner.Start(bgCtx)
 
 	return true, nil
 }
@@ -96,7 +96,7 @@ func (s *strategyService) Stop(ctx context.Context, strategyId bson.ObjectID) er
 	runner.Stop()
 
 	s.hub.UnRegister(strategyId.Hex())
-	log.Printf("Strategy %s stopped manually", strategyId)
+	log.Info().Msgf("Strategy %s stopped manually", strategyId.Hex())
 	return nil
 }
 

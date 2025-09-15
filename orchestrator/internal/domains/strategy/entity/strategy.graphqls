@@ -51,7 +51,7 @@ type SymbolRule {
 }
 
 type StrategyRule {
-    symbol: SymbolRule!
+    symbols: [SymbolRule!]
     transaction: Transaction!
     profit: Float
     loss: Float

@@ -13,6 +13,9 @@
 - [ ] **Custom Validation for Strategy Domain (CRU)**
   - Add validation rules for all `Strategy` fields.
   - Ensure nested entities are validated, including:
+    - `StartTime`
+    - `EndTime`
+    - `Rule`
     - `Rule`
     - `Symbol`
     - `EntryLogic`

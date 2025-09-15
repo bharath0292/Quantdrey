@@ -98,22 +98,22 @@ func (u UpdateStrategy) ToUpdateBson() bson.M {
 		}
 
 		// --- SymbolRule ---
-		symbol := u.Rule.Symbol
-		if symbol.LookUpSymbol != nil {
-			update["rule.symbol.lookupSymbol"] = symbol.LookUpSymbol
-		}
-		if symbol.Instrument != nil {
-			update["rule.symbol.instrumentType"] = symbol.Instrument
-		}
-		if symbol.OrderSymbol != nil {
-			update["rule.symbol.orderSymbol"] = symbol.OrderSymbol
-		}
-		if symbol.Expiry != nil {
-			update["rule.symbol.expiry"] = symbol.Expiry
-		}
-		if symbol.LotSize != nil {
-			update["rule.symbol.lotSize"] = symbol.LotSize
-		}
+		// symbol := u.Rule.Symbols
+		// if symbol.LookUpSymbol != nil {
+		// 	update["rule.symbol.lookupSymbol"] = symbol.LookUpSymbol
+		// }
+		// if symbol.Instrument != nil {
+		// 	update["rule.symbol.instrumentType"] = symbol.Instrument
+		// }
+		// if symbol.OrderSymbol != nil {
+		// 	update["rule.symbol.orderSymbol"] = symbol.OrderSymbol
+		// }
+		// if symbol.Expiry != nil {
+		// 	update["rule.symbol.expiry"] = symbol.Expiry
+		// }
+		// if symbol.LotSize != nil {
+		// 	update["rule.symbol.lotSize"] = symbol.LotSize
+		// }
 
 		// EntryLogic
 		if u.Rule.EntryLogic != nil {

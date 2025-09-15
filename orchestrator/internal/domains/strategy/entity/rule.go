@@ -22,7 +22,7 @@ type SymbolRule struct {
 }
 
 type UpdateStrategyRule struct {
-	Symbol      *UpdateSymbolRule            `bson:"symbol"`
+	Symbols     *[]UpdateSymbolRule          `bson:"symbol"`
 	Transaction *transactiontype.Transaction `bson:"transactionType"`
 	Profit      *float64                     `bson:"profit,omitempty"`
 	Loss        *float64                     `bson:"loss,omitempty"`
@@ -31,7 +31,7 @@ type UpdateStrategyRule struct {
 }
 
 type StrategyRule struct {
-	Symbol      SymbolRule                  `bson:"symbol"`
+	Symbols     []SymbolRule                `bson:"symbol"`
 	Transaction transactiontype.Transaction `bson:"transactionType"`
 	Profit      *float64                    `bson:"profit,omitempty"`
 	Loss        *float64                    `bson:"loss,omitempty"`
