@@ -50,10 +50,10 @@ migrate-create-sql:
 migrate-create-no-sql:
 	migrate create -ext json -dir $(MONGO_MIGRATION_DIR) -seq $(TAG)
 
-migrate-up:
+migrate-up-sql:
 	migrate -database $(POSTGRESQL_URL) -path $(POSTGRES_MIGRATION_DIR) up
 
-migrate-down:
+migrate-down-sql:
 	migrate -database $(POSTGRESQL_URL) -path $(POSTGRES_MIGRATION_DIR) down
 
 migrate-up-no-sql:
