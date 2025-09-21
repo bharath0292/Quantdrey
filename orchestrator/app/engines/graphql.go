@@ -1,18 +1,25 @@
 package engine
 
 import (
+	"context"
+	"errors"
 	"net/http"
 
 	graph "github.com/bharath0292/quantdrey/graph/generated"
 	resolver "github.com/bharath0292/quantdrey/graph/resolvers"
+	brokersservice "github.com/bharath0292/quantdrey/internal/domains/broker/service"
 	strategyservice "github.com/bharath0292/quantdrey/internal/domains/strategy/service"
+	userservice "github.com/bharath0292/quantdrey/internal/domains/user/service"
+	qerrors "github.com/bharath0292/quantdrey/pkg/errors"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/vektah/gqlparser/v2/ast"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 type GrapQLEngine struct {
@@ -20,12 +27,43 @@ type GrapQLEngine struct {
 	playground http.HandlerFunc
 }
 
-func NewGraphQLEngine(strategyService strategyservice.IStrategyService) *GrapQLEngine {
-	res := resolver.NewResolver(strategyService)
+func NewGraphQLEngine(
+	userService userservice.IUserService,
+	brokerService brokersservice.IBrokersService,
+	strategyService strategyservice.IStrategyService,
+) *GrapQLEngine {
+	res := resolver.NewResolver(userService, brokerService, strategyService)
 
 	srv := handler.New(graph.NewExecutableSchema(graph.Config{
 		Resolvers: &res,
 	}))
+
+	srv.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
+		if err == nil {
+			return nil
+		}
+
+		ge := graphql.DefaultErrorPresenter(ctx, err)
+		var qerr *qerrors.Error
+
+		if errors.As(err, &qerr) {
+			if qerr == nil {
+				return ge
+			}
+
+			ext := map[string]any{
+				"code": qerr.Code(),
+			}
+			if qerr.Err() != nil {
+				ext["cause"] = qerr.Err().Error()
+			}
+
+			ge.Extensions = ext
+			ge.Message = qerr.Msg()
+		}
+
+		return ge
+	})
 
 	/*
 		- CORS preflight (OPTIONS) requests — important for browser compatibility

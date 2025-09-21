@@ -2,6 +2,7 @@ package redisFactory
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -14,11 +15,15 @@ type RedisClient struct {
 	client rueidis.Client
 }
 
-func NewRedisClient(config RedisConfig) (*RedisClient, error) {
+func NewRedisClient(config *RedisConfig) (*RedisClient, error) {
+	if config == nil {
+		return nil, errors.New("missing config")
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	client, err := rueidis.NewClient(rueidis.ClientOption(config))
+	client, err := rueidis.NewClient(rueidis.ClientOption(*config))
 	if err != nil {
 		return nil, fmt.Errorf("connection failed: %w", err)
 	}

@@ -1,0 +1,9 @@
+extend type Query {
+    loginUser(email: String!, password: String!): User
+}
+
+extend type Mutation {
+    signupUser(input: UserInput!): User!
+    updateUser(id: ID!, input: UserInput!): User!
+    deleteUser(id: ID!): Boolean!
+}

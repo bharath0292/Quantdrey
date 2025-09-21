@@ -13,6 +13,8 @@ import (
 	postgresFactory "github.com/bharath0292/quantdrey/infrastructure/postgres"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 
+	brokersrepository "github.com/bharath0292/quantdrey/internal/domains/broker/repository"
+	brokersservice "github.com/bharath0292/quantdrey/internal/domains/broker/service"
 	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
 	strategyrunner "github.com/bharath0292/quantdrey/internal/domains/strategy/runner"
@@ -20,6 +22,8 @@ import (
 	tickentity "github.com/bharath0292/quantdrey/internal/domains/tick/entity"
 	tickhub "github.com/bharath0292/quantdrey/internal/domains/tick/hub"
 	tickservice "github.com/bharath0292/quantdrey/internal/domains/tick/service"
+	userrepository "github.com/bharath0292/quantdrey/internal/domains/user/repository"
+	userservice "github.com/bharath0292/quantdrey/internal/domains/user/service"
 
 	engine "github.com/bharath0292/quantdrey/app/engines"
 
@@ -122,17 +126,33 @@ func main() {
 		MinPoolSize: 5,
 	}
 
-	postgresConfig := postgresFactory.PostgresConfig{}
+	postgresConfig := postgresFactory.PostgresConfig{
+		Host:     os.Getenv("POSTGRES_SERVER"),
+		Port:     5432,
+		User:     os.Getenv("POSTGRES_USER"),
+		Password: os.Getenv("POSTGRES_PASSWORD"),
+		DBName:   os.Getenv("POSTGRES_DB"),
+		SSLMode:  "disable",
+		TimeZone: "Asia/Kolkata",
+	}
 
 	factories, err := factory.NewFactory(factory.FactoryConfig{
-		RedisConfig:    redisOptions,
-		NatsConfig:     natsOptions,
-		PostgresConfig: postgresConfig,
-		MongoConfig:    mongoConfig,
+		RedisConfig:    &redisOptions,
+		NatsConfig:     &natsOptions,
+		PostgresConfig: &postgresConfig,
+		MongoConfig:    &mongoConfig,
 	})
 	if err != nil {
 		log.Fatal().Err(err).Msg("factory initialization failed")
 	}
+
+	/* ######### User Domain ######### */
+	userRepository := userrepository.NewUserRepository(factories.PostgresClient, factories.MongoClient, factories.RedisClient)
+	userService := userservice.NewUserService(userRepository)
+
+	/* ######### Brokers Domain ######### */
+	brokersRepository := brokersrepository.NewBrokersRepository(factories.PostgresClient, factories.RedisClient)
+	brokersService := brokersservice.NewUserService(brokersRepository)
 
 	/* ######### Tick Domain ######### */
 	tickInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, tickentity.Bar]()
@@ -157,7 +177,7 @@ func main() {
 
 	/* ######### Engines ######### */
 	restEngine := engine.NewRestEngine()
-	graphqlEngine := engine.NewGraphQLEngine(strategyService)
+	graphqlEngine := engine.NewGraphQLEngine(userService, brokersService, strategyService)
 	handlers := engine.RestEngineHandlers{}
 	restEngine.Setup(handlers, graphqlEngine)
 

@@ -1,10 +1,8 @@
-type Query {
-    # ------------[ STRATEGY RUNNER DOMAIN ]------------
+extend type Query {
     runStrategy(strategyId: BsonId!): Boolean!
 }
 
-type Mutation {
-    # ------------[ STRATEGY DOMAIN ]------------
+extend type Mutation {
     createStrategy(userId: ID!, input: CreateStrategy!): Strategy!
     updateStrategy(strategyId: BsonId!, input: UpdateStrategy!): Strategy!
 }

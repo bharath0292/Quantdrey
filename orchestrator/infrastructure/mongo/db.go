@@ -26,7 +26,11 @@ type MongoClient struct {
 	db     *mongo.Database
 }
 
-func NewMongoClient(config MongoConfig) (*MongoClient, error) {
+func NewMongoClient(config *MongoConfig) (*MongoClient, error) {
+	if config == nil {
+		return nil, errors.New("missing config")
+	}
+
 	timeout := time.Duration(30) * time.Second
 
 	mongoUri := fmt.Sprintf("mongodb://%s:%s@%s/", config.Username, config.Password, config.Uri)

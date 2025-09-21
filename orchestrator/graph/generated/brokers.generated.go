@@ -11,107 +11,23 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	strategydto "github.com/bharath0292/quantdrey/internal/domains/strategy/dto"
-	strategyentity "github.com/bharath0292/quantdrey/internal/domains/strategy/entity"
+	brokersentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
+	userentity "github.com/bharath0292/quantdrey/internal/domains/user/entity"
 	"github.com/vektah/gqlparser/v2/ast"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // region    ************************** generated!.gotpl **************************
 
-type MutationResolver interface {
-	CreateStrategy(ctx context.Context, userID int, input strategydto.CreateStrategy) (*strategyentity.Strategy, error)
-	UpdateStrategy(ctx context.Context, strategyID bson.ObjectID, input strategydto.UpdateStrategy) (*strategyentity.Strategy, error)
-}
 type QueryResolver interface {
+	GetBrokers(ctx context.Context) ([]*brokersentity.Broker, error)
 	RunStrategy(ctx context.Context, strategyID bson.ObjectID) (bool, error)
+	LoginUser(ctx context.Context, email string, password string) (*userentity.User, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
-
-func (ec *executionContext) field_Mutation_createStrategy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_createStrategy_argsUserID(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["userId"] = arg0
-	arg1, err := ec.field_Mutation_createStrategy_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_createStrategy_argsUserID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (int, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-	if tmp, ok := rawArgs["userId"]; ok {
-		return ec.unmarshalNID2int(ctx, tmp)
-	}
-
-	var zeroVal int
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_createStrategy_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (strategydto.CreateStrategy, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐCreateStrategy(ctx, tmp)
-	}
-
-	var zeroVal strategydto.CreateStrategy
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateStrategy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := ec.field_Mutation_updateStrategy_argsStrategyID(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["strategyId"] = arg0
-	arg1, err := ec.field_Mutation_updateStrategy_argsInput(ctx, rawArgs)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-func (ec *executionContext) field_Mutation_updateStrategy_argsStrategyID(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (bson.ObjectID, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("strategyId"))
-	if tmp, ok := rawArgs["strategyId"]; ok {
-		return ec.unmarshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, tmp)
-	}
-
-	var zeroVal bson.ObjectID
-	return zeroVal, nil
-}
-
-func (ec *executionContext) field_Mutation_updateStrategy_argsInput(
-	ctx context.Context,
-	rawArgs map[string]any,
-) (strategydto.UpdateStrategy, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNUpdateStrategy2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋdtoᚐUpdateStrategy(ctx, tmp)
-	}
-
-	var zeroVal strategydto.UpdateStrategy
-	return zeroVal, nil
-}
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
@@ -129,6 +45,47 @@ func (ec *executionContext) field_Query___type_argsName(
 ) (string, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 	if tmp, ok := rawArgs["name"]; ok {
+		return ec.unmarshalNString2string(ctx, tmp)
+	}
+
+	var zeroVal string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_loginUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Query_loginUser_argsEmail(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := ec.field_Query_loginUser_argsPassword(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["password"] = arg1
+	return args, nil
+}
+func (ec *executionContext) field_Query_loginUser_argsEmail(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+	if tmp, ok := rawArgs["email"]; ok {
+		return ec.unmarshalNString2string(ctx, tmp)
+	}
+
+	var zeroVal string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_loginUser_argsPassword(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+	if tmp, ok := rawArgs["password"]; ok {
 		return ec.unmarshalNString2string(ctx, tmp)
 	}
 
@@ -167,8 +124,8 @@ func (ec *executionContext) field_Query_runStrategy_argsStrategyID(
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Mutation_createStrategy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createStrategy(ctx, field)
+func (ec *executionContext) _Query_getBrokers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getBrokers(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -181,7 +138,7 @@ func (ec *executionContext) _Mutation_createStrategy(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateStrategy(rctx, fc.Args["userId"].(int), fc.Args["input"].(strategydto.CreateStrategy))
+		return ec.resolvers.Query().GetBrokers(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -193,126 +150,28 @@ func (ec *executionContext) _Mutation_createStrategy(ctx context.Context, field 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*strategyentity.Strategy)
+	res := resTmp.([]*brokersentity.Broker)
 	fc.Result = res
-	return ec.marshalNStrategy2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategy(ctx, field.Selections, res)
+	return ec.marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐBrokerᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createStrategy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getBrokers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "Mutation",
+		Object:     "Query",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_Strategy_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Strategy_name(ctx, field)
-			case "userId":
-				return ec.fieldContext_Strategy_userId(ctx, field)
-			case "startTime":
-				return ec.fieldContext_Strategy_startTime(ctx, field)
-			case "endTime":
-				return ec.fieldContext_Strategy_endTime(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Strategy_createdAt(ctx, field)
-			case "maxTransactionPerDay":
-				return ec.fieldContext_Strategy_maxTransactionPerDay(ctx, field)
-			case "maxProfit":
-				return ec.fieldContext_Strategy_maxProfit(ctx, field)
-			case "maxLoss":
-				return ec.fieldContext_Strategy_maxLoss(ctx, field)
+			case "ID":
+				return ec.fieldContext_Broker_ID(ctx, field)
+			case "Name":
+				return ec.fieldContext_Broker_Name(ctx, field)
+			case "DisplayName":
+				return ec.fieldContext_Broker_DisplayName(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Strategy", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Broker", field.Name)
 		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createStrategy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateStrategy(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_updateStrategy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateStrategy(rctx, fc.Args["strategyId"].(bson.ObjectID), fc.Args["input"].(strategydto.UpdateStrategy))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*strategyentity.Strategy)
-	fc.Result = res
-	return ec.marshalNStrategy2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋstrategyᚋentityᚐStrategy(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updateStrategy(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Strategy_id(ctx, field)
-			case "name":
-				return ec.fieldContext_Strategy_name(ctx, field)
-			case "userId":
-				return ec.fieldContext_Strategy_userId(ctx, field)
-			case "startTime":
-				return ec.fieldContext_Strategy_startTime(ctx, field)
-			case "endTime":
-				return ec.fieldContext_Strategy_endTime(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_Strategy_createdAt(ctx, field)
-			case "maxTransactionPerDay":
-				return ec.fieldContext_Strategy_maxTransactionPerDay(ctx, field)
-			case "maxProfit":
-				return ec.fieldContext_Strategy_maxProfit(ctx, field)
-			case "maxLoss":
-				return ec.fieldContext_Strategy_maxLoss(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Strategy", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateStrategy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }
@@ -366,6 +225,68 @@ func (ec *executionContext) fieldContext_Query_runStrategy(ctx context.Context, 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_runStrategy_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_loginUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_loginUser(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().LoginUser(rctx, fc.Args["email"].(string), fc.Args["password"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*userentity.User)
+	fc.Result = res
+	return ec.marshalOUser2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_loginUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "email":
+				return ec.fieldContext_User_email(ctx, field)
+			case "dob":
+				return ec.fieldContext_User_dob(ctx, field)
+			case "country":
+				return ec.fieldContext_User_country(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_loginUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -515,62 +436,6 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 
 // region    **************************** object.gotpl ****************************
 
-var mutationImplementors = []string{"Mutation"}
-
-func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, mutationImplementors)
-	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
-		Object: "Mutation",
-	})
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		innerCtx := graphql.WithRootFieldContext(ctx, &graphql.RootFieldContext{
-			Object: field.Name,
-			Field:  field,
-		})
-
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Mutation")
-		case "createStrategy":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createStrategy(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateStrategy":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateStrategy(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -590,6 +455,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
+		case "getBrokers":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getBrokers(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "runStrategy":
 			field := field
 
@@ -603,6 +490,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "loginUser":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_loginUser(ctx, field)
 				return res
 			}
 

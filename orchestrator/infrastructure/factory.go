@@ -11,10 +11,10 @@ import (
 )
 
 type FactoryConfig struct {
-	RedisConfig    redisFactory.RedisConfig
-	NatsConfig     natsfactory.NatsConfig
-	PostgresConfig postgresFactory.PostgresConfig
-	MongoConfig    mongoFactory.MongoConfig
+	RedisConfig    *redisFactory.RedisConfig
+	NatsConfig     *natsfactory.NatsConfig
+	PostgresConfig *postgresFactory.PostgresConfig
+	MongoConfig    *mongoFactory.MongoConfig
 }
 
 type Factory struct {

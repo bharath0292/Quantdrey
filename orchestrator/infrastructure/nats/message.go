@@ -1,6 +1,7 @@
 package natsfactory
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -24,7 +25,11 @@ type NatsClient struct {
 
 type MessageHandler func(msg *nats.Msg)
 
-func NewNatsClient(config NatsConfig) (*NatsClient, error) {
+func NewNatsClient(config *NatsConfig) (*NatsClient, error) {
+	if config == nil {
+		return nil, errors.New("missing config")
+	}
+
 	// Apply default options if none are provided
 	opts := config.Options
 	if opts == nil {

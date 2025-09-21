@@ -147,6 +147,9 @@ models:
   BsonId:
     model:
       - github.com/bharath0292/quantdrey/graph/schema/scalars.BsonId
+  Uint64:
+    model:
+      - github.com/bharath0292/quantdrey/graph/schema/scalars.Uint64
   # The GraphQL spec explicitly states that the Int type is a signed 32-bit
   # integer. Using Go int or int64 to represent it can lead to unexpected
   # behavior, and some GraphQL tools like Apollo Router will fail when
@@ -182,6 +185,19 @@ models:
     model:
       - github.com/bharath0292/quantdrey/pkg/enums/indicators.Indicator
   ################ Domains #######################
+  # -- User --
+  User:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/user/entity.User
+  UserInput:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/user/dto.UserInput
+
+  # -- Brokers --
+  Broker:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/broker/entity.Broker
+
   # -- Indicator --
   BbOutput:
     model:

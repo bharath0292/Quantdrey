@@ -1,6 +1,9 @@
-CREATE TABLE IF NOT EXISTS users(
-   user_id serial PRIMARY KEY,
-   username VARCHAR (50) UNIQUE NOT NULL,
-   password VARCHAR (50) NOT NULL,
-   email VARCHAR (300) UNIQUE NOT NULL
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255),
+    dob DATE,
+    country VARCHAR(100),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
