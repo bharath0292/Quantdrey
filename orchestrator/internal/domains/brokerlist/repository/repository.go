@@ -1,4 +1,4 @@
-package brokersrepository
+package brokerlistrepository
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 
 	postgresFactory "github.com/bharath0292/quantdrey/infrastructure/postgres"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
-	brokersentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
+	brokersentity "github.com/bharath0292/quantdrey/internal/domains/brokerlist/entity"
 )
 
 type brokersRepository struct {

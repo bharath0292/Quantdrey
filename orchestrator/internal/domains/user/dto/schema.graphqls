@@ -4,3 +4,7 @@ input UserInput {
     dob: Time
     country: String
 }
+
+input UserBrokerConfigInput {
+    flattrade: FlattradeConfigInput
+}

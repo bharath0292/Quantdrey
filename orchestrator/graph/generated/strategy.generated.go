@@ -33,11 +33,37 @@ type MutationResolver interface {
 	SignupUser(ctx context.Context, input userdto.UserInput) (*userentity.User, error)
 	UpdateUser(ctx context.Context, id int, input userdto.UserInput) (*userentity.User, error)
 	DeleteUser(ctx context.Context, id int) (bool, error)
+	CreateBroker(ctx context.Context, config userdto.UserBrokerConfigInput) (bson.ObjectID, error)
+	UpdateBroker(ctx context.Context, brokerID bson.ObjectID, input userdto.UserBrokerConfigInput) (*userentity.UserBrokerConfig, error)
+	DeleteBroker(ctx context.Context, brokerID bson.ObjectID) (bool, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation_createBroker_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_createBroker_argsConfig(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["config"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_createBroker_argsConfig(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (userdto.UserBrokerConfigInput, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("config"))
+	if tmp, ok := rawArgs["config"]; ok {
+		return ec.unmarshalNUserBrokerConfigInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋdtoᚐUserBrokerConfigInput(ctx, tmp)
+	}
+
+	var zeroVal userdto.UserBrokerConfigInput
+	return zeroVal, nil
+}
 
 func (ec *executionContext) field_Mutation_createStrategy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
@@ -77,6 +103,29 @@ func (ec *executionContext) field_Mutation_createStrategy_argsInput(
 	}
 
 	var zeroVal strategydto.CreateStrategy
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBroker_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_deleteBroker_argsBrokerID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["brokerId"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_deleteBroker_argsBrokerID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (bson.ObjectID, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("brokerId"))
+	if tmp, ok := rawArgs["brokerId"]; ok {
+		return ec.unmarshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, tmp)
+	}
+
+	var zeroVal bson.ObjectID
 	return zeroVal, nil
 }
 
@@ -123,6 +172,47 @@ func (ec *executionContext) field_Mutation_signupUser_argsInput(
 	}
 
 	var zeroVal userdto.UserInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBroker_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Mutation_updateBroker_argsBrokerID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["brokerId"] = arg0
+	arg1, err := ec.field_Mutation_updateBroker_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_updateBroker_argsBrokerID(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (bson.ObjectID, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("brokerId"))
+	if tmp, ok := rawArgs["brokerId"]; ok {
+		return ec.unmarshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, tmp)
+	}
+
+	var zeroVal bson.ObjectID
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBroker_argsInput(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (userdto.UserBrokerConfigInput, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNUserBrokerConfigInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋdtoᚐUserBrokerConfigInput(ctx, tmp)
+	}
+
+	var zeroVal userdto.UserBrokerConfigInput
 	return zeroVal, nil
 }
 
@@ -985,6 +1075,181 @@ func (ec *executionContext) fieldContext_Mutation_deleteUser(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createBroker(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_createBroker(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CreateBroker(rctx, fc.Args["config"].(userdto.UserBrokerConfigInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bson.ObjectID)
+	fc.Result = res
+	return ec.marshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_createBroker(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type BsonId does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createBroker_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBroker(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateBroker(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateBroker(rctx, fc.Args["brokerId"].(bson.ObjectID), fc.Args["input"].(userdto.UserBrokerConfigInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*userentity.UserBrokerConfig)
+	fc.Result = res
+	return ec.marshalNUserBrokerConfig2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUserBrokerConfig(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBroker(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_UserBrokerConfig_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_UserBrokerConfig_userId(ctx, field)
+			case "brokerName":
+				return ec.fieldContext_UserBrokerConfig_brokerName(ctx, field)
+			case "credentials":
+				return ec.fieldContext_UserBrokerConfig_credentials(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserBrokerConfig", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBroker_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBroker(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteBroker(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteBroker(rctx, fc.Args["brokerId"].(bson.ObjectID))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteBroker(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBroker_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3090,6 +3355,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteUser":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteUser(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createBroker":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createBroker(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBroker":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBroker(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBroker":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBroker(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

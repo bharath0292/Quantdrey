@@ -12,12 +12,14 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
-	brokersentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
+	brokerentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
+	brokerlistentity "github.com/bharath0292/quantdrey/internal/domains/brokerlist/entity"
 	indicatorcollection "github.com/bharath0292/quantdrey/internal/domains/indicator/collection"
 	indicatordto "github.com/bharath0292/quantdrey/internal/domains/indicator/dto"
 	userdto "github.com/bharath0292/quantdrey/internal/domains/user/dto"
 	userentity "github.com/bharath0292/quantdrey/internal/domains/user/entity"
 	"github.com/vektah/gqlparser/v2/ast"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -34,7 +36,7 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Broker_ID(ctx context.Context, field graphql.CollectedField, obj *brokersentity.Broker) (ret graphql.Marshaler) {
+func (ec *executionContext) _Broker_ID(ctx context.Context, field graphql.CollectedField, obj *brokerlistentity.Broker) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Broker_ID(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -78,7 +80,7 @@ func (ec *executionContext) fieldContext_Broker_ID(_ context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Broker_Name(ctx context.Context, field graphql.CollectedField, obj *brokersentity.Broker) (ret graphql.Marshaler) {
+func (ec *executionContext) _Broker_Name(ctx context.Context, field graphql.CollectedField, obj *brokerlistentity.Broker) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Broker_Name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -122,7 +124,7 @@ func (ec *executionContext) fieldContext_Broker_Name(_ context.Context, field gr
 	return fc, nil
 }
 
-func (ec *executionContext) _Broker_DisplayName(ctx context.Context, field graphql.CollectedField, obj *brokersentity.Broker) (ret graphql.Marshaler) {
+func (ec *executionContext) _Broker_DisplayName(ctx context.Context, field graphql.CollectedField, obj *brokerlistentity.Broker) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Broker_DisplayName(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -432,6 +434,182 @@ func (ec *executionContext) fieldContext_User_country(_ context.Context, field g
 	return fc, nil
 }
 
+func (ec *executionContext) _UserBrokerConfig_id(ctx context.Context, field graphql.CollectedField, obj *userentity.UserBrokerConfig) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserBrokerConfig_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Id, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bson.ObjectID)
+	fc.Result = res
+	return ec.marshalNBsonId2goᚗmongodbᚗorgᚋmongoᚑdriverᚋv2ᚋbsonᚐObjectID(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserBrokerConfig_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserBrokerConfig",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type BsonId does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserBrokerConfig_userId(ctx context.Context, field graphql.CollectedField, obj *userentity.UserBrokerConfig) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserBrokerConfig_userId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UserId, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserBrokerConfig_userId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserBrokerConfig",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserBrokerConfig_brokerName(ctx context.Context, field graphql.CollectedField, obj *userentity.UserBrokerConfig) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserBrokerConfig_brokerName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.BrokerName, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserBrokerConfig_brokerName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserBrokerConfig",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserBrokerConfig_credentials(ctx context.Context, field graphql.CollectedField, obj *userentity.UserBrokerConfig) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserBrokerConfig_credentials(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Credentials, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(map[string]any)
+	fc.Result = res
+	return ec.marshalNMap2map(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserBrokerConfig_credentials(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserBrokerConfig",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Map does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -470,6 +648,47 @@ func (ec *executionContext) unmarshalInputCreateIndicatorParams(ctx context.Cont
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputFlattradeConfigInput(ctx context.Context, obj any) (brokerentity.FlattradeConfig, error) {
+	var it brokerentity.FlattradeConfig
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"clientId", "apiKey", "apiSecret"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "clientId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientId"))
+			data, err := ec.unmarshalOString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClientId = data
+		case "apiKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("apiKey"))
+			data, err := ec.unmarshalOString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApiKey = data
+		case "apiSecret":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("apiSecret"))
+			data, err := ec.unmarshalOString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApiSecret = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateIndicatorParams(ctx context.Context, obj any) (indicatordto.UpdateIndicatorParams, error) {
 	var it indicatordto.UpdateIndicatorParams
 	asMap := map[string]any{}
@@ -498,6 +717,33 @@ func (ec *executionContext) unmarshalInputUpdateIndicatorParams(ctx context.Cont
 				return it, err
 			}
 			it.Bb = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUserBrokerConfigInput(ctx context.Context, obj any) (userdto.UserBrokerConfigInput, error) {
+	var it userdto.UserBrokerConfigInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"flattrade"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "flattrade":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("flattrade"))
+			data, err := ec.unmarshalOFlattradeConfigInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐFlattradeConfig(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Flattrade = data
 		}
 	}
 
@@ -562,7 +808,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj any
 
 var brokerImplementors = []string{"Broker"}
 
-func (ec *executionContext) _Broker(ctx context.Context, sel ast.SelectionSet, obj *brokersentity.Broker) graphql.Marshaler {
+func (ec *executionContext) _Broker(ctx context.Context, sel ast.SelectionSet, obj *brokerlistentity.Broker) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, brokerImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -695,11 +941,65 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
+var userBrokerConfigImplementors = []string{"UserBrokerConfig"}
+
+func (ec *executionContext) _UserBrokerConfig(ctx context.Context, sel ast.SelectionSet, obj *userentity.UserBrokerConfig) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userBrokerConfigImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UserBrokerConfig")
+		case "id":
+			out.Values[i] = ec._UserBrokerConfig_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "userId":
+			out.Values[i] = ec._UserBrokerConfig_userId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "brokerName":
+			out.Values[i] = ec._UserBrokerConfig_brokerName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "credentials":
+			out.Values[i] = ec._UserBrokerConfig_credentials(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐBrokerᚄ(ctx context.Context, sel ast.SelectionSet, v []*brokersentity.Broker) graphql.Marshaler {
+func (ec *executionContext) marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerlistᚋentityᚐBrokerᚄ(ctx context.Context, sel ast.SelectionSet, v []*brokerlistentity.Broker) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -723,7 +1023,7 @@ func (ec *executionContext) marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋqu
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNBroker2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐBroker(ctx, sel, v[i])
+			ret[i] = ec.marshalNBroker2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerlistᚋentityᚐBroker(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -743,7 +1043,7 @@ func (ec *executionContext) marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋqu
 	return ret
 }
 
-func (ec *executionContext) marshalNBroker2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐBroker(ctx context.Context, sel ast.SelectionSet, v *brokersentity.Broker) graphql.Marshaler {
+func (ec *executionContext) marshalNBroker2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerlistᚋentityᚐBroker(ctx context.Context, sel ast.SelectionSet, v *brokerlistentity.Broker) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -776,9 +1076,36 @@ func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋbharath0292ᚋquantdr
 	return ec._User(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNUserBrokerConfig2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUserBrokerConfig(ctx context.Context, sel ast.SelectionSet, v userentity.UserBrokerConfig) graphql.Marshaler {
+	return ec._UserBrokerConfig(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUserBrokerConfig2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUserBrokerConfig(ctx context.Context, sel ast.SelectionSet, v *userentity.UserBrokerConfig) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UserBrokerConfig(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUserBrokerConfigInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋdtoᚐUserBrokerConfigInput(ctx context.Context, v any) (userdto.UserBrokerConfigInput, error) {
+	res, err := ec.unmarshalInputUserBrokerConfigInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUserInput2githubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋdtoᚐUserInput(ctx context.Context, v any) (userdto.UserInput, error) {
 	res, err := ec.unmarshalInputUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOFlattradeConfigInput2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐFlattradeConfig(ctx context.Context, v any) (*brokerentity.FlattradeConfig, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputFlattradeConfigInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOUpdateIndicatorParams2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋindicatorᚋdtoᚐUpdateIndicatorParams(ctx context.Context, v any) (*indicatordto.UpdateIndicatorParams, error) {
@@ -794,6 +1121,53 @@ func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋbharath0292ᚋquantdr
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOUserBrokerConfig2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUserBrokerConfigᚄ(ctx context.Context, sel ast.SelectionSet, v []*userentity.UserBrokerConfig) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNUserBrokerConfig2ᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUserBrokerConfig(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 // endregion ***************************** type.gotpl *****************************

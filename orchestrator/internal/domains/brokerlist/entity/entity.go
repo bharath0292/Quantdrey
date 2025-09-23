@@ -1,4 +1,4 @@
-package brokersentity
+package brokerlistentity
 
 import (
 	"time"

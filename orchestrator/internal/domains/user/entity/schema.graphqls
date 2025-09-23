@@ -4,3 +4,10 @@ type User {
     dob: Time
     country: String
 }
+
+type UserBrokerConfig {
+    id: BsonId!
+    userId: Int!
+    brokerName: String!
+    credentials: Map!
+}

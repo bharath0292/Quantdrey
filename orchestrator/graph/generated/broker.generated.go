@@ -11,7 +11,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	brokersentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
+	brokerlistentity "github.com/bharath0292/quantdrey/internal/domains/brokerlist/entity"
 	userentity "github.com/bharath0292/quantdrey/internal/domains/user/entity"
 	"github.com/vektah/gqlparser/v2/ast"
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -20,9 +20,10 @@ import (
 // region    ************************** generated!.gotpl **************************
 
 type QueryResolver interface {
-	GetBrokers(ctx context.Context) ([]*brokersentity.Broker, error)
+	GetBrokers(ctx context.Context) ([]*brokerlistentity.Broker, error)
 	RunStrategy(ctx context.Context, strategyID bson.ObjectID) (bool, error)
 	LoginUser(ctx context.Context, email string, password string) (*userentity.User, error)
+	GetUsersBrokers(ctx context.Context) ([]*userentity.UserBrokerConfig, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -150,9 +151,9 @@ func (ec *executionContext) _Query_getBrokers(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*brokersentity.Broker)
+	res := resTmp.([]*brokerlistentity.Broker)
 	fc.Result = res
-	return ec.marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerᚋentityᚐBrokerᚄ(ctx, field.Selections, res)
+	return ec.marshalNBroker2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋbrokerlistᚋentityᚐBrokerᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getBrokers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -289,6 +290,57 @@ func (ec *executionContext) fieldContext_Query_loginUser(ctx context.Context, fi
 	if fc.Args, err = ec.field_Query_loginUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getUsersBrokers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getUsersBrokers(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().GetUsersBrokers(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*userentity.UserBrokerConfig)
+	fc.Result = res
+	return ec.marshalOUserBrokerConfig2ᚕᚖgithubᚗcomᚋbharath0292ᚋquantdreyᚋinternalᚋdomainsᚋuserᚋentityᚐUserBrokerConfigᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getUsersBrokers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_UserBrokerConfig_id(ctx, field)
+			case "userId":
+				return ec.fieldContext_UserBrokerConfig_userId(ctx, field)
+			case "brokerName":
+				return ec.fieldContext_UserBrokerConfig_brokerName(ctx, field)
+			case "credentials":
+				return ec.fieldContext_UserBrokerConfig_credentials(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserBrokerConfig", field.Name)
+		},
 	}
 	return fc, nil
 }
@@ -509,6 +561,25 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_loginUser(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "getUsersBrokers":
+			field := field
+
+			innerFunc := func(ctx context.Context, _ *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getUsersBrokers(ctx, field)
 				return res
 			}
 

@@ -88,9 +88,12 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		CreateBroker   func(childComplexity int, config userdto.UserBrokerConfigInput) int
 		CreateStrategy func(childComplexity int, userID int, input strategydto.CreateStrategy) int
+		DeleteBroker   func(childComplexity int, brokerID bson.ObjectID) int
 		DeleteUser     func(childComplexity int, id int) int
 		SignupUser     func(childComplexity int, input userdto.UserInput) int
+		UpdateBroker   func(childComplexity int, brokerID bson.ObjectID, input userdto.UserBrokerConfigInput) int
 		UpdateStrategy func(childComplexity int, strategyID bson.ObjectID, input strategydto.UpdateStrategy) int
 		UpdateUser     func(childComplexity int, id int, input userdto.UserInput) int
 	}
@@ -104,9 +107,10 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetBrokers  func(childComplexity int) int
-		LoginUser   func(childComplexity int, email string, password string) int
-		RunStrategy func(childComplexity int, strategyID bson.ObjectID) int
+		GetBrokers      func(childComplexity int) int
+		GetUsersBrokers func(childComplexity int) int
+		LoginUser       func(childComplexity int, email string, password string) int
+		RunStrategy     func(childComplexity int, strategyID bson.ObjectID) int
 	}
 
 	Rsi struct {
@@ -152,6 +156,13 @@ type ComplexityRoot struct {
 		DOB     func(childComplexity int) int
 		Email   func(childComplexity int) int
 		ID      func(childComplexity int) int
+	}
+
+	UserBrokerConfig struct {
+		BrokerName  func(childComplexity int) int
+		Credentials func(childComplexity int) int
+		Id          func(childComplexity int) int
+		UserId      func(childComplexity int) int
 	}
 }
 
@@ -314,6 +325,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.LogicalGroup.Operator(childComplexity), true
 
+	case "Mutation.createBroker":
+		if e.complexity.Mutation.CreateBroker == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBroker_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBroker(childComplexity, args["config"].(userdto.UserBrokerConfigInput)), true
+
 	case "Mutation.createStrategy":
 		if e.complexity.Mutation.CreateStrategy == nil {
 			break
@@ -325,6 +348,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateStrategy(childComplexity, args["userId"].(int), args["input"].(strategydto.CreateStrategy)), true
+
+	case "Mutation.deleteBroker":
+		if e.complexity.Mutation.DeleteBroker == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBroker_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBroker(childComplexity, args["brokerId"].(bson.ObjectID)), true
 
 	case "Mutation.deleteUser":
 		if e.complexity.Mutation.DeleteUser == nil {
@@ -349,6 +384,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.SignupUser(childComplexity, args["input"].(userdto.UserInput)), true
+
+	case "Mutation.updateBroker":
+		if e.complexity.Mutation.UpdateBroker == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBroker_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBroker(childComplexity, args["brokerId"].(bson.ObjectID), args["input"].(userdto.UserBrokerConfigInput)), true
 
 	case "Mutation.updateStrategy":
 		if e.complexity.Mutation.UpdateStrategy == nil {
@@ -415,6 +462,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.GetBrokers(childComplexity), true
+
+	case "Query.getUsersBrokers":
+		if e.complexity.Query.GetUsersBrokers == nil {
+			break
+		}
+
+		return e.complexity.Query.GetUsersBrokers(childComplexity), true
 
 	case "Query.loginUser":
 		if e.complexity.Query.LoginUser == nil {
@@ -629,6 +683,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.ID(childComplexity), true
 
+	case "UserBrokerConfig.brokerName":
+		if e.complexity.UserBrokerConfig.BrokerName == nil {
+			break
+		}
+
+		return e.complexity.UserBrokerConfig.BrokerName(childComplexity), true
+
+	case "UserBrokerConfig.credentials":
+		if e.complexity.UserBrokerConfig.Credentials == nil {
+			break
+		}
+
+		return e.complexity.UserBrokerConfig.Credentials(childComplexity), true
+
+	case "UserBrokerConfig.id":
+		if e.complexity.UserBrokerConfig.Id == nil {
+			break
+		}
+
+		return e.complexity.UserBrokerConfig.Id(childComplexity), true
+
+	case "UserBrokerConfig.userId":
+		if e.complexity.UserBrokerConfig.UserId == nil {
+			break
+		}
+
+		return e.complexity.UserBrokerConfig.UserId(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -648,6 +730,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateStrategy,
 		ec.unmarshalInputCreateStrategyRule,
 		ec.unmarshalInputCreateSymbolRule,
+		ec.unmarshalInputFlattradeConfigInput,
 		ec.unmarshalInputUpdateBbParams,
 		ec.unmarshalInputUpdateCondition,
 		ec.unmarshalInputUpdateExpression,
@@ -659,6 +742,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateStrategy,
 		ec.unmarshalInputUpdateStrategyRule,
 		ec.unmarshalInputUpdateSymbolRule,
+		ec.unmarshalInputUserBrokerConfigInput,
 		ec.unmarshalInputUserInput,
 	)
 	first := true
@@ -793,7 +877,13 @@ enum LogicalOperator {
     sell
 }
 `, BuiltIn: false},
-	{Name: "../../internal/domains/broker/entity/schema.graphqls", Input: `type Broker {
+	{Name: "../../internal/domains/broker/entity/schema.graphqls", Input: `input FlattradeConfigInput {
+    clientId: String
+    apiKey: String
+    apiSecret: String
+}
+`, BuiltIn: false},
+	{Name: "../../internal/domains/brokerlist/entity/schema.graphqls", Input: `type Broker {
     ID: Uint64!
     Name: String!
     DisplayName: String!
@@ -1062,6 +1152,10 @@ type Strategy {
     dob: Time
     country: String
 }
+
+input UserBrokerConfigInput {
+    flattrade: FlattradeConfigInput
+}
 `, BuiltIn: false},
 	{Name: "../../internal/domains/user/entity/schema.graphqls", Input: `type User {
     id: ID!
@@ -1069,14 +1163,22 @@ type Strategy {
     dob: Time
     country: String
 }
+
+type UserBrokerConfig {
+    id: BsonId!
+    userId: Int!
+    brokerName: String!
+    credentials: Map!
+}
 `, BuiltIn: false},
-	{Name: "../schema/brokers.graphqls", Input: `extend type Query {
+	{Name: "../schema/broker.graphqls", Input: `extend type Query {
     getBrokers: [Broker!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/scalars/scalars.graphqls", Input: `scalar BsonId
 scalar Time
 scalar Uint64
+scalar Map
 `, BuiltIn: false},
 	{Name: "../schema/strategy.graphqls", Input: `extend type Query {
     runStrategy(strategyId: BsonId!): Boolean!
@@ -1089,12 +1191,21 @@ extend type Mutation {
 `, BuiltIn: false},
 	{Name: "../schema/user.graphqls", Input: `extend type Query {
     loginUser(email: String!, password: String!): User
+
+    getUsersBrokers: [UserBrokerConfig!]
 }
 
 extend type Mutation {
     signupUser(input: UserInput!): User!
     updateUser(id: ID!, input: UserInput!): User!
     deleteUser(id: ID!): Boolean!
+
+    createBroker(config: UserBrokerConfigInput!): BsonId!
+    updateBroker(
+        brokerId: BsonId!
+        input: UserBrokerConfigInput!
+    ): UserBrokerConfig!
+    deleteBroker(brokerId: BsonId!): Boolean!
 }
 `, BuiltIn: false},
 }

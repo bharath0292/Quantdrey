@@ -1,0 +1,5 @@
+type Broker {
+    ID: Uint64!
+    Name: String!
+    DisplayName: String!
+}

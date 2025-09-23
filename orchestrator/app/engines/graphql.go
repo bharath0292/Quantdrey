@@ -7,7 +7,7 @@ import (
 
 	graph "github.com/bharath0292/quantdrey/graph/generated"
 	resolver "github.com/bharath0292/quantdrey/graph/resolvers"
-	brokersservice "github.com/bharath0292/quantdrey/internal/domains/broker/service"
+	brokerlistservice "github.com/bharath0292/quantdrey/internal/domains/brokerlist/service"
 	strategyservice "github.com/bharath0292/quantdrey/internal/domains/strategy/service"
 	userservice "github.com/bharath0292/quantdrey/internal/domains/user/service"
 	qerrors "github.com/bharath0292/quantdrey/pkg/errors"
@@ -29,7 +29,7 @@ type GrapQLEngine struct {
 
 func NewGraphQLEngine(
 	userService userservice.IUserService,
-	brokerService brokersservice.IBrokersService,
+	brokerService brokerlistservice.IBrokersService,
 	strategyService strategyservice.IStrategyService,
 ) *GrapQLEngine {
 	res := resolver.NewResolver(userService, brokerService, strategyService)

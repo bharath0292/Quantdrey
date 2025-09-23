@@ -3,8 +3,6 @@ schema:
   - pkg/**/*.graphqls
   - internal/**/*.graphqls
   - graph/schema/**/*.graphqls
-  # - internal/domains/indicators/indicators.graphqls
-  # - internal/domains/strategy/strategy.graphqls
 
 # Where should the generated server code go?
 exec:
@@ -185,6 +183,14 @@ models:
     model:
       - github.com/bharath0292/quantdrey/pkg/enums/indicators.Indicator
   ################ Domains #######################
+  # -- Brokers --
+  Broker:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/brokerlist/entity.Broker
+  FlattradeConfigInput:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/broker/entity.FlattradeConfig
+
   # -- User --
   User:
     model:
@@ -192,11 +198,12 @@ models:
   UserInput:
     model:
       - github.com/bharath0292/quantdrey/internal/domains/user/dto.UserInput
-
-  # -- Brokers --
-  Broker:
+  UserBrokerConfigInput:
     model:
-      - github.com/bharath0292/quantdrey/internal/domains/broker/entity.Broker
+      - github.com/bharath0292/quantdrey/internal/domains/user/dto.UserBrokerConfigInput
+  UserBrokerConfig:
+    model:
+      - github.com/bharath0292/quantdrey/internal/domains/user/entity.UserBrokerConfig
 
   # -- Indicator --
   BbOutput:

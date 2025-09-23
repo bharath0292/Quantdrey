@@ -3,6 +3,7 @@ package userdto
 import (
 	"time"
 
+	brokerentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
 	userentity "github.com/bharath0292/quantdrey/internal/domains/user/entity"
 )
 
@@ -33,4 +34,8 @@ func (u *UserInput) ToEntity() *userentity.User {
 	}
 
 	return user
+}
+
+type UserBrokerConfigInput struct {
+	Flattrade *brokerentity.FlattradeConfig
 }

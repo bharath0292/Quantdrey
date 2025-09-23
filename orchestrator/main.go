@@ -13,8 +13,8 @@ import (
 	postgresFactory "github.com/bharath0292/quantdrey/infrastructure/postgres"
 	redisFactory "github.com/bharath0292/quantdrey/infrastructure/redis"
 
-	brokersrepository "github.com/bharath0292/quantdrey/internal/domains/broker/repository"
-	brokersservice "github.com/bharath0292/quantdrey/internal/domains/broker/service"
+	brokersrepository "github.com/bharath0292/quantdrey/internal/domains/brokerlist/repository"
+	brokerlistservice "github.com/bharath0292/quantdrey/internal/domains/brokerlist/service"
 	strategyhub "github.com/bharath0292/quantdrey/internal/domains/strategy/hub"
 	strategyrepository "github.com/bharath0292/quantdrey/internal/domains/strategy/repository"
 	strategyrunner "github.com/bharath0292/quantdrey/internal/domains/strategy/runner"
@@ -152,7 +152,7 @@ func main() {
 
 	/* ######### Brokers Domain ######### */
 	brokersRepository := brokersrepository.NewBrokersRepository(factories.PostgresClient, factories.RedisClient)
-	brokersService := brokersservice.NewUserService(brokersRepository)
+	brokersService := brokerlistservice.NewUserService(brokersRepository)
 
 	/* ######### Tick Domain ######### */
 	tickInMemoryClient, err := inmemoryFactory.NewInMemoryClient[string, tickentity.Bar]()

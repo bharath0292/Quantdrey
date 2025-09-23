@@ -7,9 +7,9 @@ package resolver
 import (
 	"context"
 
-	brokersentity "github.com/bharath0292/quantdrey/internal/domains/broker/entity"
+	brokerlistentity "github.com/bharath0292/quantdrey/internal/domains/brokerlist/entity"
 )
 
-func (r *queryResolver) GetBrokers(ctx context.Context) ([]*brokersentity.Broker, error) {
-	return r.brokersService.GetBrokersList(ctx)
+func (r *queryResolver) GetBrokers(ctx context.Context) ([]*brokerlistentity.Broker, error) {
+	return r.brokerListService.GetBrokersList(ctx)
 }

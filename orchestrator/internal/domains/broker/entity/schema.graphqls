@@ -1,5 +1,5 @@
-type Broker {
-    ID: Uint64!
-    Name: String!
-    DisplayName: String!
+input FlattradeConfigInput {
+    clientId: String
+    apiKey: String
+    apiSecret: String
 }

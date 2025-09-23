@@ -85,10 +85,41 @@ func (c *MongoClient) ReadDocument(ctx context.Context, collection string, id bs
 	return nil
 }
 
-func (c *MongoClient) CreateDocument(ctx context.Context, collection string, document any, out any) (bson.ObjectID, error) {
+func (c *MongoClient) ReadDocuments(ctx context.Context, collection string, conditions bson.M, out any) error {
+	if out == nil {
+		return errors.New("output object not available")
+	}
+
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	coll := c.db.Collection(collection)
+	cursor, err := coll.Find(ctxWithTimeout, conditions)
+	if err != nil {
+		log.Error().Err(err).
+			Str("collection", collection).
+			Msg("Failed to fetch documents")
+		return mongo.ErrNilDocument
+	}
+	defer cursor.Close(ctxWithTimeout)
+
+	if err = cursor.All(ctxWithTimeout, out); err != nil {
+		log.Error().Err(err).
+			Str("collection", collection).
+			Msg("Failed to decode documents")
+		return mongo.ErrNilDocument
+	}
+
+	return nil
+}
+
+func (c *MongoClient) CreateDocument(ctx context.Context, collection string, document any) (bson.ObjectID, error) {
 	coll := c.db.Collection(collection)
 
-	result, err := coll.InsertOne(ctx, document)
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	result, err := coll.InsertOne(ctxWithTimeout, document)
 	if err != nil {
 		log.Error().Err(err).Str("collection", collection).Msg("Failed to insert document")
 		return bson.NilObjectID, err
@@ -100,15 +131,13 @@ func (c *MongoClient) CreateDocument(ctx context.Context, collection string, doc
 		return bson.NilObjectID, mongo.ErrNilDocument
 	}
 
-	if out != nil {
-		err = coll.FindOne(ctx, bson.M{"_id": oid}).Decode(out)
-		if err != nil {
-			log.Error().Err(err).
-				Str("collection", collection).
-				Str("insertedId", oid.Hex()).
-				Msg("Failed to fetch inserted document")
-			return bson.NilObjectID, err
-		}
+	err = coll.FindOne(ctxWithTimeout, bson.M{"_id": oid}).Decode(document)
+	if err != nil {
+		log.Error().Err(err).
+			Str("collection", collection).
+			Str("insertedId", oid.Hex()).
+			Msg("Failed to fetch inserted document")
+		return bson.NilObjectID, err
 	}
 
 	return oid, nil
@@ -117,7 +146,10 @@ func (c *MongoClient) CreateDocument(ctx context.Context, collection string, doc
 func (c *MongoClient) UpdateDocument(ctx context.Context, collection string, filter bson.M, update bson.M, out any) (bson.ObjectID, error) {
 	coll := c.db.Collection(collection)
 
-	result, err := coll.UpdateOne(ctx, filter, update)
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	result, err := coll.UpdateOne(ctxWithTimeout, filter, update)
 	if err != nil {
 		log.Error().Err(err).Str("collection", collection).Msg("Failed to update document")
 		return bson.NilObjectID, err
@@ -130,9 +162,8 @@ func (c *MongoClient) UpdateDocument(ctx context.Context, collection string, fil
 
 	oid := filter["_id"].(bson.ObjectID)
 
-	// Optionally fetch updated document
 	if out != nil {
-		err = coll.FindOne(ctx, bson.M{"_id": oid}).Decode(out)
+		err = coll.FindOne(ctxWithTimeout, bson.M{"_id": oid}).Decode(out)
 		if err != nil {
 			log.Error().Err(err).
 				Str("collection", collection).
@@ -143,4 +174,19 @@ func (c *MongoClient) UpdateDocument(ctx context.Context, collection string, fil
 	}
 
 	return oid, nil
+}
+
+func (c *MongoClient) DeleteOne(ctx context.Context, collection string, filter bson.M) error {
+	coll := c.db.Collection(collection)
+
+	ctxWithTimeout, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	_, err := coll.DeleteOne(ctxWithTimeout, filter)
+	if err != nil {
+		log.Error().Err(err).Str("collection", collection).Msg("Failed to update document")
+		return err
+	}
+
+	return nil
 }

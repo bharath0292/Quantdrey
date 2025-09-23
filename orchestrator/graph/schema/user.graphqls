@@ -1,9 +1,18 @@
 extend type Query {
     loginUser(email: String!, password: String!): User
+
+    getUsersBrokers: [UserBrokerConfig!]
 }
 
 extend type Mutation {
     signupUser(input: UserInput!): User!
     updateUser(id: ID!, input: UserInput!): User!
     deleteUser(id: ID!): Boolean!
+
+    createBroker(config: UserBrokerConfigInput!): BsonId!
+    updateBroker(
+        brokerId: BsonId!
+        input: UserBrokerConfigInput!
+    ): UserBrokerConfig!
+    deleteBroker(brokerId: BsonId!): Boolean!
 }

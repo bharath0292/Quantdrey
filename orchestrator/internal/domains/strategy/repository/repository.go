@@ -36,13 +36,12 @@ func (s *strategyRepository) GetStrategy(ctx context.Context, strategyID bson.Ob
 }
 
 func (s *strategyRepository) CreateStrategy(ctx context.Context, newStrategy *strategyentity.Strategy) (*strategyentity.Strategy, error) {
-	var createdStrategy strategyentity.Strategy
-	_, err := s.mongo.CreateDocument(ctx, COLLECTION_NAME, newStrategy, &createdStrategy)
+	_, err := s.mongo.CreateDocument(ctx, COLLECTION_NAME, newStrategy)
 	if err != nil {
 		return nil, err
 	}
 
-	return &createdStrategy, nil
+	return newStrategy, nil
 }
 
 func (s *strategyRepository) UpdateStrategy(ctx context.Context, strategyID bson.ObjectID, updateMap bson.M) (*strategyentity.Strategy, error) {

@@ -1,3 +1,4 @@
 scalar BsonId
 scalar Time
 scalar Uint64
+scalar Map

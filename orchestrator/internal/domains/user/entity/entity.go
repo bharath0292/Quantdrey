@@ -1,6 +1,10 @@
 package userentity
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
+)
 
 type User struct {
 	ID        int        `gorm:"primaryKey"`
@@ -10,4 +14,14 @@ type User struct {
 	Country   *string    `gorm:"column:country"`
 	CreatedAt *time.Time `gorm:"column:created_at;autoCreateTime"`
 	UpdatedAt *time.Time `gorm:"column:updated_at;autoUpdateTime"`
+}
+
+type UserBrokerConfig struct {
+	Id          bson.ObjectID  `bson:"_id,omitempty"`
+	UserId      int            `bson:"userId"`
+	BrokerName  string         `bson:"brokerName"`
+	Credentials map[string]any `bson:"credentials"`
+	CreatedAt   time.Time      `bson:"createdAt"`
+	UpdatedAt   *time.Time     `bson:"updatedAt"`
+	DeletedAt   *time.Time     `bson:"deletedAt"`
 }
