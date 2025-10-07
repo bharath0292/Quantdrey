@@ -1,0 +1,12 @@
+[workspace]
+resolver = "3"
+
+members = [
+    "broker_flattrade",
+    "core",
+    "server"
+]
+default-members = ["server"]
+
+[workspace.dependencies]
+anyhow = "1.0.100"
